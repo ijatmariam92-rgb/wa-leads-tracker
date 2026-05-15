@@ -1,674 +1,873 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="ms" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>WA Leads Tracker</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap');
 
-  :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --surface2: #f0efe9;
-    --border: #e2e0d8;
-    --text: #1a1a18;
-    --text2: #6b6960;
-    --text3: #a8a69f;
-    --accent: #1a5cff;
-    --accent-bg: #eef2ff;
-    --green: #16a34a;
-    --green-bg: #dcfce7;
-    --amber: #d97706;
-    --amber-bg: #fef3c7;
-    --red: #dc2626;
-    --red-bg: #fee2e2;
-    --purple: #7c3aed;
-    --radius: 14px;
-    --radius-sm: 8px;
-  }
+/* ── THEME TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;--border:#e2e0d8;
+  --text:#1a1a18;--text2:#6b6960;--text3:#a8a69f;
+  --accent:#1a5cff;--accent-bg:#eef2ff;
+  --green:#16a34a;--green-bg:#dcfce7;
+  --amber:#d97706;--amber-bg:#fef3c7;
+  --red:#dc2626;--red-bg:#fee2e2;
+  --shadow:rgba(0,0,0,.06);
+  --radius:14px;--radius-sm:8px;
+}
+[data-theme="dark"] {
+  --bg:#0f0f0e;--surface:#1c1c1a;--surface2:#252523;--border:#2e2e2b;
+  --text:#f0efe9;--text2:#a8a69f;--text3:#6b6960;
+  --accent:#4d7fff;--accent-bg:#1a2540;
+  --green:#22c55e;--green-bg:#0f2d1a;
+  --amber:#f59e0b;--amber-bg:#2d1f08;
+  --red:#f87171;--red-bg:#2d0f0f;
+  --shadow:rgba(0,0,0,.3);
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .2s,color .2s}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding-bottom: 80px;
-  }
+/* ── AUTH SCREEN ──────────────────────────────────────────── */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px 28px;width:100%;max-width:380px;box-shadow:0 4px 24px var(--shadow)}
+.auth-logo{width:44px;height:44px;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.auth-logo svg{width:24px;height:24px;color:#fff}
+.auth-title{font-size:20px;font-weight:600;margin-bottom:4px}
+.auth-sub{font-size:13px;color:var(--text3);margin-bottom:24px}
+.auth-field{margin-bottom:12px}
+.auth-field label{font-size:12px;font-weight:500;color:var(--text2);display:block;margin-bottom:5px}
+.auth-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border .15s}
+.auth-input:focus{border-color:var(--accent)}
+.auth-input::placeholder{color:var(--text3)}
+.auth-btn{width:100%;padding:13px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:6px;transition:opacity .15s}
+.auth-btn:active{opacity:.85}
+.auth-btn.loading{opacity:.6;pointer-events:none}
+.auth-err{font-size:12px;color:var(--red);margin-top:8px;display:none}
+.auth-dark-toggle{display:flex;align-items:center;justify-content:flex-end;margin-bottom:16px}
 
-  /* HEADER */
-  .header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .app-name { font-size: 15px; font-weight: 600; color: var(--text); }
-  .app-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
-  .sync-badge {
-    font-size: 11px; font-weight: 500; padding: 4px 10px;
-    border-radius: 20px; background: var(--green-bg); color: var(--green);
-    display: flex; align-items: center; gap: 4px;
-  }
-  .sync-badge.syncing { background: var(--amber-bg); color: var(--amber); }
-  .sync-badge.error { background: var(--red-bg); color: var(--red); }
-  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+/* ── APP ──────────────────────────────────────────────────── */
+.app{display:none;flex-direction:column;min-height:100vh}
+.app.visible{display:flex}
 
-  /* NAV */
-  .nav {
-    display: flex; background: var(--surface2);
-    border-radius: 10px; padding: 3px; gap: 2px;
-  }
-  .nav-btn {
-    flex: 1; padding: 8px; border: none; background: transparent;
-    border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif;
-    font-weight: 500; color: var(--text2); cursor: pointer;
-    transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 5px;
-  }
-  .nav-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-  .nav-btn svg { width: 15px; height: 15px; }
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px 10px;position:sticky;top:0;z-index:100}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.header-left{display:flex;align-items:center;gap:10px}
+.app-name{font-size:15px;font-weight:600}
+.user-pill{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--accent-bg);color:var(--accent)}
+.admin-pill{background:var(--amber-bg);color:var(--amber)}
+.header-right{display:flex;align-items:center;gap:8px}
+.dark-toggle{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.dark-toggle svg{width:16px;height:16px;color:var(--text2)}
+.logout-btn{font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif}
 
-  /* MAIN */
-  .main { padding: 16px; max-width: 480px; margin: 0 auto; }
+.nav{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px}
+.nav-btn{flex:1;padding:7px 4px;border:none;background:transparent;border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:4px}
+.nav-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px var(--shadow)}
+.nav-btn svg{width:14px;height:14px;flex-shrink:0}
+.nav-btn.admin-only{display:none}
 
-  /* SECTION */
-  .section { margin-bottom: 12px; }
-  .section-label {
-    font-size: 11px; font-weight: 600; color: var(--text3);
-    text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px;
-    padding: 0 2px;
-  }
+.main{padding:14px;max-width:480px;margin:0 auto;width:100%;flex:1}
+.section{margin-bottom:12px}
+.section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;padding:0 2px}
+.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.card-body{padding:14px}
 
-  /* CARD */
-  .card {
-    background: var(--surface); border-radius: var(--radius);
-    border: 1px solid var(--border); overflow: hidden;
-  }
-  .card-body { padding: 16px; }
+.field-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border .15s}
+.field-input:focus{border-color:var(--accent)}
+.field-input::placeholder{color:var(--text3)}
 
-  /* STAFF PICKER */
-  .staff-input {
-    width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm); font-size: 16px; font-family: 'DM Sans', sans-serif;
-    background: var(--surface); color: var(--text); outline: none; transition: border .15s;
-  }
-  .staff-input:focus { border-color: var(--accent); }
+.day-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.day-row::-webkit-scrollbar{display:none}
+.day-pill{flex-shrink:0;padding:8px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.day-pill .dp-num{font-size:10px;color:var(--text3);font-weight:400}
+.day-pill.active{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.day-pill.saved{border-color:var(--green)}
+.day-pill.saved .dp-num{color:var(--green)}
 
-  /* DAY PILLS */
-  .day-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
-  .day-row::-webkit-scrollbar { display: none; }
-  .day-pill {
-    flex-shrink: 0; padding: 8px 14px; border-radius: 20px;
-    border: 1.5px solid var(--border); background: var(--surface);
-    font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif;
-    color: var(--text2); cursor: pointer; transition: all .15s;
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-  }
-  .day-pill .dp-num { font-size: 11px; color: var(--text3); font-weight: 400; }
-  .day-pill.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
-  .day-pill.active .dp-num { color: var(--accent); opacity: .7; }
-  .day-pill.saved { border-color: var(--green); }
-  .day-pill.saved .dp-num { color: var(--green); }
+.total-wrap{position:relative}
+.total-big{width:100%;padding:13px 60px 13px 15px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:28px;font-weight:600;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border .15s}
+.total-big:focus{border-color:var(--accent)}
+.total-unit{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--text3);pointer-events:none}
+.remaining-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;margin-top:7px;background:var(--surface2);color:var(--text2)}
+.remaining-badge.over{background:var(--red-bg);color:var(--red)}
+.remaining-badge.exact{background:var(--green-bg);color:var(--green)}
 
-  /* TOTAL INPUT */
-  .total-wrap { position: relative; }
-  .total-input {
-    width: 100%; padding: 14px 60px 14px 16px;
-    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-    font-size: 24px; font-weight: 600; font-family: 'DM Sans', sans-serif;
-    background: var(--surface); color: var(--text); outline: none; transition: border .15s;
-  }
-  .total-input:focus { border-color: var(--accent); }
-  .total-unit {
-    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-    font-size: 13px; color: var(--text3); pointer-events: none;
-  }
+.lv-item{padding:13px 15px;border-bottom:1px solid var(--border)}
+.lv-item:last-child{border-bottom:none}
+.lv-top{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.lv-num{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
+.lv-info{flex:1}
+.lv-name{font-size:13px;font-weight:500;color:var(--text)}
+.lv-desc{font-size:11px;color:var(--text3);margin-top:1px}
+.lv-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:var(--green-bg);color:var(--green);white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+.lv-bottom{display:flex;align-items:center;gap:9px}
+.lv-bar-track{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.lv-bar-fill{height:100%;border-radius:3px;transition:width .3s ease;width:0%}
+.lv-pct{font-size:12px;font-weight:600;min-width:36px;text-align:right;color:var(--text3);font-family:'DM Mono',monospace}
+.stepper{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0}
+.step-btn{width:34px;height:34px;border:none;background:var(--surface2);font-size:20px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .1s,opacity .15s;line-height:1;padding-bottom:2px;-webkit-user-select:none;user-select:none}
+.step-btn:active{background:var(--border)}
+.step-val-inp{width:42px;text-align:center;font-size:15px;font-weight:600;color:var(--text);border:none;background:transparent;outline:none;font-family:'DM Sans',sans-serif;padding:0}
 
-  /* LEVEL CARDS */
-  .lv-item {
-    padding: 14px 16px; border-bottom: 1px solid var(--border);
-    transition: background .1s;
-  }
-  .lv-item:last-child { border-bottom: none; }
-  .lv-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .lv-num {
-    width: 30px; height: 30px; border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600; color: #fff; flex-shrink: 0;
-  }
-  .lv-info { flex: 1; }
-  .lv-name { font-size: 14px; font-weight: 500; color: var(--text); }
-  .lv-desc { font-size: 12px; color: var(--text3); margin-top: 1px; }
-  .lv-tag {
-    font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px;
-    background: var(--green-bg); color: var(--green); white-space: nowrap;
-    text-transform: uppercase; letter-spacing: .04em;
-  }
-  .lv-bottom { display: flex; align-items: center; gap: 10px; }
-  .lv-bar-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-  .lv-bar-fill { height: 100%; border-radius: 3px; transition: width .35s ease; width: 0%; }
-  .lv-pct { font-size: 13px; font-weight: 600; min-width: 38px; text-align: right; color: var(--text3); font-family: 'DM Mono', monospace; }
-  .stepper { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
-  .step-btn {
-    width: 36px; height: 36px; border: none; background: var(--surface2);
-    font-size: 20px; color: var(--text); cursor: pointer; font-family: 'DM Sans', sans-serif;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    transition: background .1s; line-height: 1; padding-bottom: 2px;
-    -webkit-user-select: none; user-select: none;
-  }
-  .step-btn:active { background: var(--border); }
-  .step-val {
-    width: 44px; text-align: center; font-size: 16px; font-weight: 600;
-    color: var(--text); border: none; background: transparent; outline: none;
-    font-family: 'DM Sans', sans-serif; padding: 0;
-  }
+.metric-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.metric-card{background:var(--surface2);border-radius:var(--radius-sm);padding:11px}
+.mc-lbl{font-size:10px;color:var(--text3);margin-bottom:3px}
+.mc-val{font-size:20px;font-weight:600;color:var(--text)}
+.mc-sub{font-size:10px;color:var(--text3);margin-top:1px}
 
-  /* METRICS */
-  .metric-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .metric-card { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px; }
-  .metric-card .mc-lbl { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
-  .metric-card .mc-val { font-size: 22px; font-weight: 600; color: var(--text); }
-  .metric-card .mc-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.action-panel{border-radius:var(--radius-sm);padding:13px}
+.action-panel.green{background:var(--green-bg)}.action-panel.amber{background:var(--amber-bg)}.action-panel.red{background:var(--red-bg)}
+.ap-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.action-panel.green .ap-title{color:var(--green)}.action-panel.amber .ap-title{color:var(--amber)}.action-panel.red .ap-title{color:var(--red)}
+.ap-body{font-size:12px;line-height:1.55}
+.action-panel.green .ap-body{color:var(--green)}.action-panel.amber .ap-body{color:var(--amber)}.action-panel.red .ap-body{color:var(--red)}
 
-  /* ACTION PANEL */
-  .action-panel { border-radius: var(--radius-sm); padding: 14px; }
-  .action-panel.green { background: var(--green-bg); }
-  .action-panel.amber { background: var(--amber-bg); }
-  .action-panel.red { background: var(--red-bg); }
-  .ap-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-  .action-panel.green .ap-title { color: var(--green); }
-  .action-panel.amber .ap-title { color: var(--amber); }
-  .action-panel.red .ap-title { color: var(--red); }
-  .ap-body { font-size: 13px; line-height: 1.55; }
-  .action-panel.green .ap-body { color: #15803d; }
-  .action-panel.amber .ap-body { color: #92400e; }
-  .action-panel.red .ap-body { color: #991b1b; }
+.save-btn{width:100%;padding:14px;border-radius:var(--radius);border:none;background:var(--accent);color:#fff;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.save-btn:active{opacity:.85}
+.save-btn.loading{opacity:.6;pointer-events:none}
+.save-btn svg{width:17px;height:17px}
 
-  /* SAVE BUTTON */
-  .save-btn {
-    width: 100%; padding: 15px; border-radius: var(--radius);
-    border: none; background: var(--text); color: #fff;
-    font-size: 15px; font-weight: 600; font-family: 'DM Sans', sans-serif;
-    cursor: pointer; transition: opacity .15s; display: flex;
-    align-items: center; justify-content: center; gap: 8px;
-  }
-  .save-btn:active { opacity: .85; }
-  .save-btn.loading { opacity: .6; pointer-events: none; }
-  .save-btn svg { width: 18px; height: 18px; }
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--surface);padding:10px 18px;border-radius:20px;font-size:13px;font-weight:500;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  /* TOAST */
-  .toast {
-    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--text); color: #fff; padding: 10px 20px;
-    border-radius: 20px; font-size: 13px; font-weight: 500;
-    opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; z-index: 999;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.progress-bar{display:flex;gap:4px;margin-bottom:3px}
+.pb-seg{flex:1;height:3px;border-radius:2px;background:var(--border);transition:background .3s}
+.pb-seg.filled{background:var(--accent)}
+.pb-label{font-size:11px;color:var(--text3);margin-bottom:11px}
 
-  /* REPORT TAB */
-  .day-summary-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
-  }
-  .dsc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .dsc-day { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; }
-  .dsc-staff { font-size: 14px; font-weight: 500; color: var(--text); }
-  .dsc-total { font-size: 22px; font-weight: 600; color: var(--text); }
-  .dsc-sub { font-size: 11px; color: var(--text3); }
-  .dsc-levels { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
-  .dsc-lv { display: flex; align-items: center; gap: 8px; }
-  .dsc-lv-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .dsc-lv-name { font-size: 12px; color: var(--text2); flex: 1; }
-  .dsc-lv-bar { flex: 2; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-  .dsc-lv-fill { height: 100%; border-radius: 3px; }
-  .dsc-lv-pct { font-size: 12px; font-weight: 600; color: var(--text); min-width: 36px; text-align: right; font-family: 'DM Mono', monospace; }
-  .dsc-empty { opacity: .4; }
-  .dsc-empty .dsc-total { color: var(--text3); font-size: 14px; font-weight: 400; }
+/* REPORT */
+.day-summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin-bottom:8px}
+.dsc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.dsc-day{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.dsc-staff{font-size:13px;font-weight:500;color:var(--text);margin-top:1px}
+.dsc-adlink{font-size:11px;color:var(--accent);margin-top:2px;word-break:break-all}
+.dsc-total{font-size:22px;font-weight:600;color:var(--text);text-align:right}
+.dsc-sub{font-size:11px;color:var(--text3);text-align:right}
+.dsc-levels{display:flex;flex-direction:column;gap:5px;margin-top:9px}
+.dsc-lv{display:flex;align-items:center;gap:7px}
+.dsc-lv-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dsc-lv-name{font-size:12px;color:var(--text2);flex:1}
+.dsc-lv-bar{flex:2;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.dsc-lv-fill{height:100%;border-radius:3px}
+.dsc-lv-pct{font-size:11px;font-weight:600;color:var(--text);min-width:34px;text-align:right;font-family:'DM Mono',monospace}
+.dsc-empty{opacity:.4}
+.summary-strip{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.ss-title{font-size:13px;font-weight:600;margin-bottom:11px}
+.big-metric-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.big-metric{background:var(--surface2);border-radius:var(--radius-sm);padding:13px}
+.bm-lbl{font-size:10px;color:var(--text3);margin-bottom:3px}
+.bm-val{font-size:24px;font-weight:600;color:var(--text)}
+.bm-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.export-btn{width:100%;padding:13px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--surface);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+.export-btn:active{background:var(--surface2)}
+.export-btn svg{width:17px;height:17px}
 
-  .summary-strip { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
-  .ss-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
-  .big-metric-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .big-metric { background: var(--surface2); border-radius: var(--radius-sm); padding: 14px; }
-  .bm-lbl { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
-  .bm-val { font-size: 26px; font-weight: 600; color: var(--text); }
-  .bm-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-state svg{width:36px;height:36px;margin-bottom:10px;opacity:.35}
+.empty-state p{font-size:14px}
 
-  .export-btn {
-    width: 100%; padding: 14px; border-radius: var(--radius);
-    border: 1.5px solid var(--border); background: var(--surface);
-    font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
-    color: var(--text); cursor: pointer; display: flex; align-items: center;
-    justify-content: center; gap: 8px; transition: background .15s;
-  }
-  .export-btn:active { background: var(--surface2); }
-  .export-btn svg { width: 18px; height: 18px; }
+/* ADMIN */
+.admin-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.admin-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px}
+.as-lbl{font-size:10px;color:var(--text3);margin-bottom:3px}
+.as-val{font-size:22px;font-weight:600;color:var(--text)}
+.as-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.admin-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px}
+.admin-table th{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;padding:9px 11px;border-bottom:1px solid var(--border);text-align:left;background:var(--surface2);white-space:nowrap}
+.admin-table td{padding:10px 11px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:var(--surface2)}
+.intent-pill{font-size:11px;font-weight:600;padding:3px 8px;border-radius:10px}
+.intent-high{background:var(--green-bg);color:var(--green)}
+.intent-mid{background:var(--amber-bg);color:var(--amber)}
+.intent-low{background:var(--red-bg);color:var(--red)}
+.action-pill{font-size:10px;font-weight:500;padding:3px 7px;border-radius:10px;background:var(--surface2);color:var(--text2);white-space:nowrap}
+.ad-link-cell{font-size:11px;color:var(--accent);text-decoration:none}
+.admin-chart{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.chart-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px}
+.chart-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.chart-label{font-size:11px;color:var(--text2);width:65px;flex-shrink:0}
+.chart-bar-wrap{flex:1;height:18px;background:var(--surface2);border-radius:5px;overflow:hidden}
+.chart-bar-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:7px;font-size:10px;font-weight:600;color:#fff;min-width:18px;transition:width .4s ease}
+.chart-pct{font-size:11px;font-weight:600;color:var(--text);min-width:36px;text-align:right;font-family:'DM Mono',monospace}
 
-  /* EMPTY STATE */
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
-  .empty-state svg { width: 40px; height: 40px; margin-bottom: 12px; opacity: .4; }
-  .empty-state p { font-size: 14px; }
+/* Staff selector for admin */
+.staff-filter{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
+.staff-filter::-webkit-scrollbar{display:none}
+.sf-btn{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.sf-btn.active{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
 
-  /* PROGRESS BAR */
-  .progress-bar { display: flex; gap: 4px; margin-bottom: 4px; }
-  .pb-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background .3s; }
-  .pb-seg.filled { background: var(--accent); }
-  .pb-label { font-size: 11px; color: var(--text3); margin-bottom: 12px; }
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:12px}
+.loading-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--text3)}
+
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <div>
-      <div class="app-name">WA Leads Tracker</div>
-      <div class="app-sub">WhatsApp closing journey</div>
+<!-- LOADING -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Memuatkan...</div>
+</div>
+
+<!-- AUTH SCREEN -->
+<div class="auth-wrap" id="auth-screen" style="display:none">
+  <div class="auth-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div class="auth-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <button class="dark-toggle" onclick="toggleDark()" title="Toggle dark mode">
+        <svg id="dark-icon-auth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
     </div>
-    <div class="sync-badge" id="sync-badge">
-      <div class="sync-dot"></div>
-      <span id="sync-text">Sedia</span>
+    <div class="auth-title">WA Leads Tracker</div>
+    <div class="auth-sub" id="auth-sub">Log masuk untuk teruskan</div>
+    <div class="auth-field" id="name-field" style="display:none">
+      <label>Nama penuh</label>
+      <input class="auth-input" type="text" id="auth-name" placeholder="cth: Aisyah Binti Ahmad">
     </div>
-  </div>
-  <div class="nav">
-    <button class="nav-btn active" onclick="goTab('input')" id="nav-input">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      Input Harian
-    </button>
-    <button class="nav-btn" onclick="goTab('report')" id="nav-report">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Laporan 5 Hari
-    </button>
+    <div class="auth-field">
+      <label>Email</label>
+      <input class="auth-input" type="email" id="auth-email" placeholder="nama@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label>Password</label>
+      <input class="auth-input" type="password" id="auth-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="auth-err" id="auth-err"></div>
+    <div class="auth-success" id="auth-success"></div>
+    <button class="auth-btn" id="auth-btn" onclick="doLogin()">Log Masuk</button>
+    <div style="text-align:center;margin:12px 0;font-size:12px;color:var(--text3)">— atau —</div>
+    <button class="auth-btn" id="reg-btn" onclick="toggleRegister()" style="background:transparent;border:1.5px solid var(--border);color:var(--text2);margin-top:0">Daftar Akaun Baru</button>
   </div>
 </div>
 
-<div class="main">
-
-  <!-- INPUT TAB -->
-  <div id="pane-input">
-
-    <div class="section">
-      <div class="section-label">Nama staff</div>
-      <div class="card">
-        <div class="card-body">
-          <input class="staff-input" type="text" id="staff" placeholder="Masukkan nama kamu..." oninput="onStaffInput()">
-        </div>
+<!-- MAIN APP -->
+<div class="app" id="app">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-left">
+        <div class="app-name">WA Leads</div>
+        <div class="user-pill" id="user-pill">—</div>
+      </div>
+      <div class="header-right">
+        <button class="dark-toggle" onclick="toggleDark()" title="Toggle dark mode">
+          <svg id="dark-icon-app" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <button class="logout-btn" onclick="doLogout()">Keluar</button>
       </div>
     </div>
-
-    <div class="section">
-      <div class="progress-bar" id="prog-bar"></div>
-      <div class="pb-label" id="prog-label">0 / 5 hari diisi</div>
-      <div class="day-row" id="day-row"></div>
+    <div class="nav">
+      <button class="nav-btn active" onclick="goTab('input')" id="nav-input">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Input
+      </button>
+      <button class="nav-btn" onclick="goTab('report')" id="nav-report">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>5 Hari
+      </button>
+      <button class="nav-btn admin-only" onclick="goTab('admin')" id="nav-admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Admin
+      </button>
     </div>
+  </div>
 
-    <div class="section">
-      <div class="section-label">Total leads masuk hari ini</div>
-      <div class="card">
-        <div class="card-body">
+  <div class="main">
+    <!-- INPUT TAB -->
+    <div id="pane-input">
+      <div class="section">
+        <div class="section-label">Link iklan Meta Ads</div>
+        <div class="card"><div class="card-body">
+          <input class="field-input" type="url" id="adlink" placeholder="https://facebook.com/ads/..." oninput="autosave()">
+        </div></div>
+      </div>
+      <div class="section">
+        <div class="progress-bar" id="prog-bar"></div>
+        <div class="pb-label" id="prog-label">0 / 5 hari diisi</div>
+        <div class="day-row" id="day-row"></div>
+      </div>
+      <div class="section">
+        <div class="section-label">Total leads masuk hari ini</div>
+        <div class="card"><div class="card-body">
           <div class="total-wrap">
-            <input class="total-input" type="number" id="total" placeholder="0" min="0" oninput="recalc()">
+            <input class="total-big" type="number" id="total" placeholder="0" min="0" oninput="recalc()">
             <span class="total-unit">leads</span>
           </div>
-        </div>
+          <div id="remaining-area"></div>
+        </div></div>
+      </div>
+      <div class="section">
+        <div class="section-label">Leads berhenti di level mana?</div>
+        <div class="card" id="lv-list"></div>
+      </div>
+      <div class="section" id="metrics-area"></div>
+      <div class="section">
+        <button class="save-btn" id="save-btn" onclick="submitData()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Simpan & Hantar
+        </button>
       </div>
     </div>
 
-    <div class="section">
-      <div class="section-label">Leads berhenti di level mana?</div>
-      <div class="card" id="lv-list"></div>
+    <!-- REPORT TAB (staff view — own data only) -->
+    <div id="pane-report" style="display:none">
+      <div id="report-body"></div>
+      <div class="section">
+        <button class="export-btn" onclick="exportCSV()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV
+        </button>
+      </div>
     </div>
 
-    <div class="section" id="metrics-area"></div>
-
-    <div class="section">
-      <button class="save-btn" id="save-btn" onclick="submitData()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        Simpan & Hantar
-      </button>
-    </div>
-
+    <!-- ADMIN TAB -->
+    <div id="pane-admin" style="display:none"><div id="admin-body"></div></div>
   </div>
-
-  <!-- REPORT TAB -->
-  <div id="pane-report" style="display:none">
-    <div id="report-body"></div>
-    <div class="section">
-      <button class="export-btn" onclick="exportCSV()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export Laporan CSV
-      </button>
-    </div>
-  </div>
-
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script>
-  // ─── CONFIG ───────────────────────────────────────────────────
-  // Paste your Google Apps Script Web App URL here after setup
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxgFa2fD5l2zbMkOM9IB7TvNW56uC058BjJ6kkmeflshpOvgr07k7-xHPwrsa7fEx-F/exec';
+<!-- FIREBASE SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, query, orderBy }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-  const LEVELS = [
-    { key:'l1', name:'Status', desc:'Hamil / Ikhtiar hamil', color:'#7c3aed', intent:false },
-    { key:'l2', name:'Problem', desc:'Masalah yang dihadapi', color:'#2563eb', intent:false },
-    { key:'l3', name:'Testimoni', desc:'Bukti & kisah kejayaan', color:'#0891b2', intent:false },
-    { key:'l4', name:'FAQ', desc:'Soal jawab', color:'#d97706', intent:true },
-    { key:'l5', name:'Harga', desc:'Tanya harga', color:'#dc2626', intent:true },
-  ];
+// ── FIREBASE CONFIG ────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyCJaA446bqY5hyNhfQnAUDeQ37yKEcnxfQ",
+  authDomain: "wa-leads-tracker.firebaseapp.com",
+  projectId: "wa-leads-tracker",
+  storageBucket: "wa-leads-tracker.firebasestorage.app",
+  messagingSenderId: "330818408556",
+  appId: "1:330818408556:web:641b5fb1933ba885624849"
+};
 
-  const DAYS = 5;
-  let curDay = 0;
-  let sessionData = Array.from({length:DAYS}, () => ({ staff:'', total:0, levels:[0,0,0,0,0], saved:false }));
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  // ─── TAB ──────────────────────────────────────────────────────
-  function goTab(t) {
-    document.getElementById('pane-input').style.display = t==='input' ? 'block' : 'none';
-    document.getElementById('pane-report').style.display = t==='report' ? 'block' : 'none';
-    document.getElementById('nav-input').classList.toggle('active', t==='input');
-    document.getElementById('nav-report').classList.toggle('active', t==='report');
-    if (t === 'report') renderReport();
+// ── CONSTANTS ──────────────────────────────────────────────
+// To make someone admin: add their email to this list
+const ADMIN_EMAILS = ['ijatmariam92@gmail.com']; // TUKAR KE EMAIL ADMIN KAU
+
+const LEVELS = [
+  {key:'l1',name:'Status',desc:'Hamil / Ikhtiar hamil',color:'#7c3aed',intent:false},
+  {key:'l2',name:'Problem',desc:'Masalah yang dihadapi',color:'#2563eb',intent:false},
+  {key:'l3',name:'Testimoni',desc:'Bukti & kisah kejayaan',color:'#0891b2',intent:false},
+  {key:'l4',name:'FAQ',desc:'Soal jawab',color:'#d97706',intent:true},
+  {key:'l5',name:'Harga',desc:'Tanya harga',color:'#dc2626',intent:true},
+];
+const DAYS = 5;
+
+let curUser = null;
+let isAdmin = false;
+let curDay = 0;
+let sessionData = emptyData();
+let adminUnsubscribe = null;
+
+function emptyData() {
+  return Array.from({length:DAYS}, () => ({adlink:'',total:0,levels:[0,0,0,0,0],saved:false,date:''}));
+}
+
+// ── DARK MODE ──────────────────────────────────────────────
+window.toggleDark = function() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  setTheme(isDark ? 'light' : 'dark');
+};
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('wa_theme', t);
+  const moonSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+  const sunSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+  ['dark-icon-auth','dark-icon-app'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.outerHTML = `<svg id="${id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${t==='dark'?'<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'  :'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'}</svg>`;
+  });
+}
+// Apply saved theme
+const savedTheme = localStorage.getItem('wa_theme') || 'light';
+setTheme(savedTheme);
+
+// ── AUTH STATE ─────────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  document.getElementById('loading').style.display = 'none';
+  if (user) {
+    curUser = user;
+    isAdmin = ADMIN_EMAILS.includes(user.email.toLowerCase());
+    showApp();
+  } else {
+    curUser = null;
+    isAdmin = false;
+    showAuth();
   }
+});
 
-  // ─── DAY STRIP ────────────────────────────────────────────────
-  function buildDayStrip() {
-    const row = document.getElementById('day-row');
-    row.innerHTML = sessionData.map((d, i) => `
-      <button class="day-pill${i===curDay?' active':''}${d.saved?' saved':''}" onclick="selectDay(${i})">
-        <span class="dp-num">Hari ${i+1}</span>
-        <span>${d.staff || '—'}</span>
-      </button>`).join('');
+function showAuth() {
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app').classList.remove('visible');
+  if(adminUnsubscribe) { adminUnsubscribe(); adminUnsubscribe = null; }
+}
 
-    const filled = sessionData.filter(d => d.saved).length;
-    document.getElementById('prog-bar').innerHTML = Array.from({length:DAYS}, (_,i) =>
-      `<div class="pb-seg${sessionData[i].saved?' filled':''}"></div>`).join('');
-    document.getElementById('prog-label').textContent = `${filled} / ${DAYS} hari diisi`;
-  }
+async function showApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
 
-  function selectDay(i) {
-    curDay = i;
-    const d = sessionData[i];
-    document.getElementById('staff').value = d.staff;
-    document.getElementById('total').value = d.total || '';
-    LEVELS.forEach((_, j) => {
-      const el = document.getElementById('lv' + j);
-      if (el) el.value = d.levels[j] || 0;
-    });
-    buildDayStrip();
-    recalc();
-  }
+  // Show user info
+  const name = curUser.displayName || curUser.email.split('@')[0];
+  const pill = document.getElementById('user-pill');
+  pill.textContent = isAdmin ? '👑 Admin' : name;
+  if(isAdmin) pill.classList.add('admin-pill');
 
-  // ─── LEVELS ───────────────────────────────────────────────────
-  function buildLevels() {
-    document.getElementById('lv-list').innerHTML = LEVELS.map((lv, i) => `
-      <div class="lv-item">
-        <div class="lv-top">
-          <div class="lv-num" style="background:${lv.color}">${i+1}</div>
-          <div class="lv-info">
-            <div class="lv-name">${lv.name} ${lv.intent ? '<span class="lv-tag">Buying signal</span>' : ''}</div>
-            <div class="lv-desc">${lv.desc}</div>
-          </div>
-        </div>
-        <div class="lv-bottom">
-          <div style="flex:1">
-            <div class="lv-bar-track">
-              <div class="lv-bar-fill" id="bar${i}" style="background:${lv.color}"></div>
-            </div>
-          </div>
-          <div class="lv-pct" id="pct${i}">—</div>
-          <div class="stepper">
-            <button class="step-btn" ontouchstart="startHold(${i},-1)" ontouchend="stopHold()" onmousedown="startHold(${i},-1)" onmouseup="stopHold()" onmouseleave="stopHold()">−</button>
-            <input class="step-val" type="number" id="lv${i}" value="0" min="0" oninput="recalc()">
-            <button class="step-btn" ontouchstart="startHold(${i},1)" ontouchend="stopHold()" onmousedown="startHold(${i},1)" onmouseup="stopHold()" onmouseleave="stopHold()">+</button>
-          </div>
-        </div>
-      </div>`).join('');
-  }
+  // Show admin nav tab if admin
+  if(isAdmin) document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
 
-  let holdTimer, holdInterval;
-  function startHold(i, d) {
-    doStep(i, d);
-    holdTimer = setTimeout(() => {
-      holdInterval = setInterval(() => doStep(i, d), 80);
-    }, 400);
-  }
-  function stopHold() { clearTimeout(holdTimer); clearInterval(holdInterval); }
-  function doStep(i, d) {
-    const el = document.getElementById('lv' + i);
-    el.value = Math.max(0, (+el.value || 0) + d);
-    recalc();
-  }
-
-  // ─── RECALC ───────────────────────────────────────────────────
-  function recalc() {
-    autosave();
-    const total = +document.getElementById('total').value || 0;
-    const vals = LEVELS.map((_, i) => +document.getElementById('lv' + i).value || 0);
-
-    LEVELS.forEach((lv, i) => {
-      const pct = total > 0 ? (vals[i] / total * 100) : 0;
-      document.getElementById('bar' + i).style.width = Math.min(pct, 100) + '%';
-      const pEl = document.getElementById('pct' + i);
-      pEl.textContent = total > 0 ? pct.toFixed(1) + '%' : '—';
-      pEl.style.color = pct > 40 ? '#dc2626' : pct > 20 ? '#d97706' : '#16a34a';
-    });
-
-    renderMetrics(total, vals);
-  }
-
-  function renderMetrics(total, vals) {
-    const area = document.getElementById('metrics-area');
-    if (!total) { area.innerHTML = ''; return; }
-
-    const intent = vals[3] + vals[4];
-    const intentPct = (intent / total * 100);
-    const assigned = vals.reduce((a, b) => a + b, 0);
-    const uncat = Math.max(0, total - assigned);
-    const l1pct = vals[0] / total * 100;
-
-    let cls = 'amber', title = '', body = '';
-    if (l1pct >= 40) {
-      cls = 'red'; title = 'Perlu baiki iklan segera';
-      body = `${l1pct.toFixed(0)}% leads berhenti di Level 1 (Status). Kemungkinan targeting iklan tidak tepat — leads yang masuk bukan kategori hamil/ikhtiar hamil. Semak semula audience dan creative iklan.`;
-    } else if (intentPct >= 25) {
-      cls = 'green'; title = 'Buying intent tinggi — follow up sekarang!';
-      body = `${intentPct.toFixed(0)}% leads sampai ke FAQ/Harga. Signal pembelian yang kuat. Pastikan staff buat close offer segera.`;
-    } else {
-      cls = 'amber'; title = 'Semak skrip WA setiap level';
-      body = `Drop-off tersebar merata. Cari level mana yang paling banyak kehilangan leads dan perbaiki skrip di bahagian tersebut.`;
-    }
-
-    area.innerHTML = `
-      <div class="section-label">Ringkasan hari ini</div>
-      <div class="metric-row" style="margin-bottom:10px">
-        <div class="metric-card"><div class="mc-lbl">Total leads</div><div class="mc-val">${total}</div></div>
-        <div class="metric-card"><div class="mc-lbl">Buying intent</div><div class="mc-val" style="color:var(--green)">${intent}</div><div class="mc-sub">${intentPct.toFixed(1)}%</div></div>
-        <div class="metric-card"><div class="mc-lbl">Belum kategori</div><div class="mc-val" style="color:var(--text3)">${uncat}</div></div>
-      </div>
-      <div class="action-panel ${cls}">
-        <div class="ap-title">${title}</div>
-        <div class="ap-body">${body}</div>
-      </div>`;
-  }
-
-  // ─── AUTOSAVE TO SESSION ──────────────────────────────────────
-  function autosave() {
-    const d = sessionData[curDay];
-    d.staff = document.getElementById('staff').value;
-    d.total = +document.getElementById('total').value || 0;
-    d.levels = LEVELS.map((_, i) => +document.getElementById('lv' + i).value || 0);
-    buildDayStrip();
-  }
-
-  function onStaffInput() { autosave(); }
-
-  // ─── SUBMIT TO GOOGLE SHEETS ──────────────────────────────────
-  async function submitData() {
-    const d = sessionData[curDay];
-    if (!d.staff.trim()) { showToast('Sila masukkan nama staff dulu'); return; }
-    if (!d.total) { showToast('Sila masukkan jumlah leads'); return; }
-
-    const btn = document.getElementById('save-btn');
-    btn.classList.add('loading');
-    btn.innerHTML = '<span>Menghantar...</span>';
-    setSyncState('syncing', 'Menghantar...');
-
-    const payload = {
-      day: curDay + 1,
-      staff: d.staff,
-      date: new Date().toLocaleDateString('ms-MY'),
-      total: d.total,
-      l1: d.levels[0], l2: d.levels[1], l3: d.levels[2], l4: d.levels[3], l5: d.levels[4],
-      intent: d.levels[3] + d.levels[4],
-      intentPct: d.total > 0 ? ((d.levels[3] + d.levels[4]) / d.total * 100).toFixed(1) : 0,
-      l1pct: d.total > 0 ? (d.levels[0] / d.total * 100).toFixed(1) : 0,
-    };
-
-    try {
-      await fetch(SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      d.saved = true;
-      buildDayStrip();
-      setSyncState('ok', 'Tersimpan');
-      showToast('✓ Data berjaya dihantar ke Sheets!');
-    } catch (e) {
-      setSyncState('error', 'Gagal');
-      showToast('Gagal hantar — semak sambungan internet');
-    }
-
-    btn.classList.remove('loading');
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Simpan & Hantar';
-  }
-
-  function setSyncState(state, text) {
-    const badge = document.getElementById('sync-badge');
-    badge.className = 'sync-badge' + (state !== 'ok' ? ' ' + state : '');
-    document.getElementById('sync-text').textContent = text;
-  }
-
-  // ─── REPORT ───────────────────────────────────────────────────
-  function renderReport() {
-    const body = document.getElementById('report-body');
-    const hasSome = sessionData.some(d => d.total > 0);
-
-    if (!hasSome) {
-      body.innerHTML = `<div class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        <p>Belum ada data diisi.<br>Pergi ke tab Input Harian dulu.</p>
-      </div>`;
-      return;
-    }
-
-    let totLeads = 0, totLevels = [0,0,0,0,0], intentTot = 0, daysWithData = 0;
-    sessionData.forEach(d => {
-      if (!d.total) return;
-      daysWithData++; totLeads += d.total;
-      d.levels.forEach((v, j) => totLevels[j] += v);
-      intentTot += d.levels[3] + d.levels[4];
-    });
-
-    const intentPct = totLeads > 0 ? (intentTot / totLeads * 100).toFixed(1) : 0;
-    const highIdx = totLevels.indexOf(Math.max(...totLevels));
-
-    const cards = sessionData.map((d, i) => {
-      if (!d.total) return `
-        <div class="day-summary-card dsc-empty">
-          <div class="dsc-head"><div class="dsc-day">Hari ${i+1}</div></div>
-          <div class="dsc-total">Tiada data</div>
-        </div>`;
-
-      const lvRows = LEVELS.map((lv, j) => {
-        const pct = (d.levels[j] / d.total * 100);
-        return `<div class="dsc-lv">
-          <div class="dsc-lv-dot" style="background:${lv.color}"></div>
-          <div class="dsc-lv-name">${lv.name}</div>
-          <div class="dsc-lv-bar"><div class="dsc-lv-fill" style="width:${Math.min(pct,100)}%;background:${lv.color}"></div></div>
-          <div class="dsc-lv-pct">${pct.toFixed(1)}%</div>
-        </div>`;
-      }).join('');
-
-      return `<div class="day-summary-card">
-        <div class="dsc-head">
-          <div><div class="dsc-day">Hari ${i+1}</div><div class="dsc-staff">${d.staff}</div></div>
-          <div style="text-align:right"><div class="dsc-total">${d.total}</div><div class="dsc-sub">leads</div></div>
-        </div>
-        <div class="dsc-levels">${lvRows}</div>
-      </div>`;
-    }).join('');
-
-    const l1pctAvg = totLeads > 0 ? (totLevels[0] / totLeads * 100) : 0;
-    let cls = 'amber', atitle = '', abody = '';
-    if (l1pctAvg >= 40) {
-      cls = 'red'; atitle = 'Tren 5 hari: Perlu baiki iklan';
-      abody = `Purata ${l1pctAvg.toFixed(0)}% leads berhenti di Status (L1) — masalah ada pada targeting iklan, bukan skrip WA.`;
-    } else if (+intentPct >= 25) {
-      cls = 'green'; atitle = 'Buying intent konsisten — bagus!';
-      abody = `Purata ${intentPct}% leads menunjukkan minat beli sepanjang ${daysWithData} hari. Teruskan strategi semasa.`;
-    } else {
-      cls = 'amber'; atitle = `Level ${highIdx+1} (${LEVELS[highIdx].name}) paling banyak drop`;
-      abody = `Fokus perbaiki skrip atau content di Level ${highIdx+1} untuk tingkatkan conversion.`;
-    }
-
-    body.innerHTML = `
-      <div class="section">
-        <div class="summary-strip">
-          <div class="ss-title">Ringkasan ${daysWithData} hari</div>
-          <div class="big-metric-row">
-            <div class="big-metric"><div class="bm-lbl">Total leads</div><div class="bm-val">${totLeads}</div><div class="bm-sub">${daysWithData} hari data</div></div>
-            <div class="big-metric"><div class="bm-lbl">Buying intent</div><div class="bm-val" style="color:var(--green)">${intentTot}</div><div class="bm-sub">${intentPct}% dari leads</div></div>
-          </div>
-          <div class="action-panel ${cls}">
-            <div class="ap-title">${atitle}</div>
-            <div class="ap-body">${abody}</div>
-          </div>
-        </div>
-      </div>
-      <div class="section">
-        <div class="section-label">Breakdown setiap hari</div>
-        ${cards}
-      </div>`;
-  }
-
-  // ─── EXPORT CSV ───────────────────────────────────────────────
-  function exportCSV() {
-    const rows = [['Hari','Tarikh','Staff','Total Leads','L1 Status','L1 %','L2 Problem','L2 %','L3 Testimoni','L3 %','L4 FAQ','L4 %','L5 Harga','L5 %','Buying Intent','Intent %']];
-    sessionData.forEach((d, i) => {
-      const pcts = d.levels.map(v => d.total > 0 ? (v / d.total * 100).toFixed(1) + '%' : '0%');
-      const intent = d.levels[3] + d.levels[4];
-      const iP = d.total > 0 ? (intent / d.total * 100).toFixed(1) + '%' : '0%';
-      rows.push([`Hari ${i+1}`, d.total > 0 ? new Date().toLocaleDateString('ms-MY') : '', d.staff, d.total,
-        ...d.levels.flatMap((v, j) => [v, pcts[j]]), intent, iP]);
-    });
-    const csv = rows.map(r => r.join(',')).join('\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob(['\uFEFF' + csv], {type:'text/csv;charset=utf-8'}));
-    a.download = `wa_leads_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-  }
-
-  // ─── TOAST ────────────────────────────────────────────────────
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  // ─── INIT ─────────────────────────────────────────────────────
+  // Load user's own data from Firestore
+  await loadUserData();
   buildDayStrip();
   buildLevels();
+  loadDayToForm(curDay);
+}
+
+// ── LOGIN / LOGOUT ─────────────────────────────────────────
+let isRegisterMode = false;
+
+window.toggleRegister = function() {
+  isRegisterMode = !isRegisterMode;
+  const nameField = document.getElementById('name-field');
+  const authBtn = document.getElementById('auth-btn');
+  const regBtn = document.getElementById('reg-btn');
+  const authSub = document.getElementById('auth-sub');
+  const passEl = document.getElementById('auth-pass');
+  document.getElementById('auth-err').style.display = 'none';
+  document.getElementById('auth-success').style.display = 'none';
+  if(isRegisterMode) {
+    nameField.style.display = 'block';
+    authBtn.textContent = 'Daftar Sekarang';
+    regBtn.textContent = 'Dah ada akaun? Log Masuk';
+    authSub.textContent = 'Daftar akaun staff baru';
+    passEl.placeholder = 'Min 6 aksara';
+    passEl.onkeydown = (e) => { if(e.key==='Enter') doRegister(); };
+    authBtn.onclick = doRegister;
+  } else {
+    nameField.style.display = 'none';
+    authBtn.textContent = 'Log Masuk';
+    regBtn.textContent = 'Daftar Akaun Baru';
+    authSub.textContent = 'Log masuk untuk teruskan';
+    passEl.placeholder = '••••••••';
+    passEl.onkeydown = (e) => { if(e.key==='Enter') doLogin(); };
+    authBtn.onclick = doLogin;
+  }
+};
+
+window.doLogin = async function() {
+  const email = document.getElementById('auth-email').value.trim();
+  const pass = document.getElementById('auth-pass').value;
+  const btn = document.getElementById('auth-btn');
+  if(!email || !pass) { showAuthErr('Sila isi email dan password'); return; }
+  btn.classList.add('loading'); btn.textContent = 'Log masuk...';
+  document.getElementById('auth-err').style.display = 'none';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    let msg = 'Email atau password tidak betul';
+    if(e.code === 'auth/too-many-requests') msg = 'Terlalu banyak percubaan. Cuba lagi sebentar.';
+    showAuthErr(msg);
+    btn.classList.remove('loading'); btn.textContent = 'Log Masuk';
+  }
+};
+
+window.doRegister = async function() {
+  const name = document.getElementById('auth-name').value.trim();
+  const email = document.getElementById('auth-email').value.trim();
+  const pass = document.getElementById('auth-pass').value;
+  const btn = document.getElementById('auth-btn');
+  if(!name) { showAuthErr('Sila masukkan nama penuh'); return; }
+  if(!email) { showAuthErr('Sila masukkan email'); return; }
+  if(pass.length < 6) { showAuthErr('Password mestilah sekurang-kurangnya 6 aksara'); return; }
+  btn.classList.add('loading'); btn.textContent = 'Mendaftar...';
+  document.getElementById('auth-err').style.display = 'none';
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await updateProfile(cred.user, { displayName: name });
+    // Auth state change will auto-login
+  } catch(e) {
+    let msg = 'Gagal daftar. Cuba semula.';
+    if(e.code === 'auth/email-already-in-use') msg = 'Email ini sudah didaftarkan. Sila log masuk.';
+    if(e.code === 'auth/invalid-email') msg = 'Format email tidak sah.';
+    if(e.code === 'auth/weak-password') msg = 'Password terlalu lemah. Guna sekurang-kurangnya 6 aksara.';
+    showAuthErr(msg);
+    btn.classList.remove('loading'); btn.textContent = 'Daftar Sekarang';
+  }
+};
+
+function showAuthErr(msg) {
+  const el = document.getElementById('auth-err');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('auth-success').style.display = 'none';
+}
+
+window.doLogout = async function() {
+  if(adminUnsubscribe) { adminUnsubscribe(); adminUnsubscribe = null; }
+  await signOut(auth);
+  sessionData = emptyData();
+};
+
+// ── FIRESTORE: LOAD USER DATA ──────────────────────────────
+async function loadUserData() {
+  const uid = curUser.uid;
+  for(let i = 0; i < DAYS; i++) {
+    try {
+      const snap = await getDoc(doc(db, 'leads', uid, 'days', `day${i+1}`));
+      if(snap.exists()) {
+        const d = snap.data();
+        sessionData[i] = { adlink:d.adlink||'', total:d.total||0, levels:d.levels||[0,0,0,0,0], saved:d.saved||false, date:d.date||'' };
+      }
+    } catch(e) {}
+  }
+}
+
+// ── FIRESTORE: SAVE DAY ────────────────────────────────────
+async function saveDayToFirestore(dayIndex) {
+  const uid = curUser.uid;
+  const d = sessionData[dayIndex];
+  const name = curUser.displayName || curUser.email.split('@')[0];
+  await setDoc(doc(db, 'leads', uid, 'days', `day${dayIndex+1}`), {
+    ...d, uid, email: curUser.email, staffName: name,
+    dayIndex: dayIndex+1, updatedAt: new Date().toISOString()
+  });
+  // Also write to top-level collection for admin real-time view
+  await setDoc(doc(db, 'allLeads', `${uid}_day${dayIndex+1}`), {
+    ...d, uid, email: curUser.email, staffName: name,
+    dayIndex: dayIndex+1, updatedAt: new Date().toISOString()
+  });
+}
+
+// ── TAB ────────────────────────────────────────────────────
+window.goTab = function(t) {
+  ['input','report','admin'].forEach(id => {
+    document.getElementById('pane-'+id).style.display = t===id?'block':'none';
+    const btn = document.getElementById('nav-'+id);
+    if(btn) btn.classList.toggle('active', t===id);
+  });
+  if(t==='report') renderReport();
+  if(t==='admin' && isAdmin) setupAdminRealtime();
+};
+
+// ── DAY STRIP ──────────────────────────────────────────────
+function buildDayStrip() {
+  document.getElementById('day-row').innerHTML = sessionData.map((d,i) => `
+    <button class="day-pill${i===curDay?' active':''}${d.saved?' saved':''}" onclick="window.selectDay(${i})">
+      <span class="dp-num">Hari ${i+1}</span>
+      <span>${d.saved?'✓':'—'}</span>
+    </button>`).join('');
+  const filled = sessionData.filter(d=>d.saved).length;
+  document.getElementById('prog-bar').innerHTML = Array.from({length:DAYS},(_,i)=>`<div class="pb-seg${sessionData[i].saved?' filled':''}"></div>`).join('');
+  document.getElementById('prog-label').textContent = `${filled} / ${DAYS} hari diisi`;
+}
+
+window.selectDay = function(i) {
+  curDay = i;
+  buildDayStrip();
+  loadDayToForm(i);
+};
+
+function loadDayToForm(i) {
+  const d = sessionData[i];
+  document.getElementById('adlink').value = d.adlink||'';
+  document.getElementById('total').value = d.total||'';
+  LEVELS.forEach((_,j) => { const el=document.getElementById('lv'+j); if(el) el.value=d.levels[j]||0; });
   recalc();
+}
+
+// ── BUILD LEVELS ───────────────────────────────────────────
+function buildLevels() {
+  document.getElementById('lv-list').innerHTML = LEVELS.map((lv,i) => `
+    <div class="lv-item">
+      <div class="lv-top">
+        <div class="lv-num" style="background:${lv.color}">${i+1}</div>
+        <div class="lv-info">
+          <div class="lv-name">${lv.name}${lv.intent?' <span class="lv-tag">Buying signal</span>':''}</div>
+          <div class="lv-desc">${lv.desc}</div>
+        </div>
+      </div>
+      <div class="lv-bottom">
+        <div style="flex:1"><div class="lv-bar-track"><div class="lv-bar-fill" id="bar${i}" style="background:${lv.color}"></div></div></div>
+        <div class="lv-pct" id="pct${i}">—</div>
+        <div class="stepper">
+          <button class="step-btn" id="minus${i}" onmousedown="startHold(${i},-1)" onmouseup="stopHold()" onmouseleave="stopHold()" ontouchstart="startHold(${i},-1)" ontouchend="stopHold()">−</button>
+          <input class="step-val-inp" type="number" id="lv${i}" value="0" min="0" oninput="recalc()">
+          <button class="step-btn" id="plus${i}" onmousedown="startHold(${i},1)" onmouseup="stopHold()" onmouseleave="stopHold()" ontouchstart="startHold(${i},1)" ontouchend="stopHold()">+</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+let holdTimer, holdInterval;
+window.startHold = function(i,d) { doStep(i,d); holdTimer=setTimeout(()=>{holdInterval=setInterval(()=>doStep(i,d),80)},400); };
+window.stopHold = function() { clearTimeout(holdTimer); clearInterval(holdInterval); };
+function doStep(i, d) {
+  const el = document.getElementById('lv'+i);
+  const total = +document.getElementById('total').value||0;
+  const others = LEVELS.reduce((s,_,j)=>s+(j===i?0:(+document.getElementById('lv'+j).value||0)),0);
+  el.value = Math.max(0, Math.min((+el.value||0)+d, total-others));
+  recalc();
+}
+
+// ── RECALC ─────────────────────────────────────────────────
+window.recalc = function() {
+  autosave();
+  const total = +document.getElementById('total').value||0;
+  const vals = LEVELS.map((_,i)=>+document.getElementById('lv'+i).value||0);
+  const assigned = vals.reduce((a,b)=>a+b,0);
+  const remaining = total - assigned;
+  const ra = document.getElementById('remaining-area');
+  if(total>0) {
+    let cls=remaining>0?'':remaining===0?'exact':'over';
+    let msg=remaining>0?`${remaining} leads belum dikategorikan`:remaining===0?'✓ Semua leads dikategorikan':`⚠ Melebihi ${Math.abs(remaining)} leads`;
+    ra.innerHTML=`<div class="remaining-badge ${cls}">${msg}</div>`;
+  } else ra.innerHTML='';
+  LEVELS.forEach((_,i)=>{
+    const others=vals.reduce((s,v,j)=>s+(j===i?0:v),0);
+    const canAdd=total>0&&vals[i]<(total-others);
+    const pb=document.getElementById('plus'+i);
+    if(pb){pb.style.opacity=canAdd?'1':'0.3';pb.style.pointerEvents=canAdd?'auto':'none';}
+    const pct=total>0?(vals[i]/total*100):0;
+    document.getElementById('bar'+i).style.width=Math.min(pct,100)+'%';
+    const pEl=document.getElementById('pct'+i);
+    pEl.textContent=total>0?pct.toFixed(1)+'%':'—';
+    pEl.style.color=pct>40?'var(--red)':pct>20?'var(--amber)':'var(--green)';
+  });
+  renderMetrics(total,vals);
+};
+
+function autosave() {
+  const d = sessionData[curDay];
+  d.adlink = document.getElementById('adlink').value;
+  d.total = +document.getElementById('total').value||0;
+  d.levels = LEVELS.map((_,i)=>+document.getElementById('lv'+i).value||0);
+}
+
+function renderMetrics(total,vals) {
+  const area=document.getElementById('metrics-area');
+  if(!total){area.innerHTML='';return;}
+  const intent=vals[3]+vals[4];
+  const intentPct=(intent/total*100);
+  const uncat=Math.max(0,total-vals.reduce((a,b)=>a+b,0));
+  const l1pct=vals[0]/total*100;
+  let cls='amber',title='',body='';
+  if(l1pct>=40){cls='red';title='Perlu baiki iklan segera';body=`${l1pct.toFixed(0)}% leads berhenti di Level 1. Targeting iklan mungkin tidak tepat.`;}
+  else if(intentPct>=25){cls='green';title='Buying intent tinggi — follow up sekarang!';body=`${intentPct.toFixed(0)}% leads sampai ke FAQ/Harga. Close offer segera.`;}
+  else{cls='amber';title='Semak skrip WA setiap level';body='Cari level yang paling banyak drop dan perbaiki skrip di situ.';}
+  area.innerHTML=`
+    <div class="section-label">Ringkasan hari ini</div>
+    <div class="metric-row" style="margin-bottom:9px">
+      <div class="metric-card"><div class="mc-lbl">Total leads</div><div class="mc-val">${total}</div></div>
+      <div class="metric-card"><div class="mc-lbl">Buying intent</div><div class="mc-val" style="color:var(--green)">${intent}</div><div class="mc-sub">${intentPct.toFixed(1)}%</div></div>
+      <div class="metric-card"><div class="mc-lbl">Belum kategori</div><div class="mc-val" style="color:var(--text3)">${uncat}</div></div>
+    </div>
+    <div class="action-panel ${cls}"><div class="ap-title">${title}</div><div class="ap-body">${body}</div></div>`;
+}
+
+// ── SUBMIT ─────────────────────────────────────────────────
+window.submitData = async function() {
+  const d = sessionData[curDay];
+  if(!d.total){showToast('Sila masukkan jumlah leads');return;}
+  const btn=document.getElementById('save-btn');
+  btn.classList.add('loading');btn.innerHTML='<span>Menghantar...</span>';
+  try {
+    d.saved = true;
+    d.date = new Date().toLocaleDateString('ms-MY');
+    await saveDayToFirestore(curDay);
+    buildDayStrip();
+    showToast('✓ Data berjaya disimpan!');
+    setTimeout(()=>{
+      sessionData[curDay]={adlink:'',total:0,levels:[0,0,0,0,0],saved:true,date:d.date};
+      document.getElementById('adlink').value='';
+      document.getElementById('total').value='';
+      LEVELS.forEach((_,i)=>{const el=document.getElementById('lv'+i);if(el)el.value=0;});
+      document.getElementById('metrics-area').innerHTML='';
+      document.getElementById('remaining-area').innerHTML='';
+      recalc();
+    },1500);
+  } catch(e) {
+    d.saved=false;
+    showToast('Gagal simpan — semak sambungan internet');
+  }
+  btn.classList.remove('loading');
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Simpan & Hantar';
+};
+
+// ── REPORT (own data) ──────────────────────────────────────
+function renderReport() {
+  const body=document.getElementById('report-body');
+  const saved=sessionData.filter(d=>d.saved);
+  if(!saved.length){body.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><p>Belum ada data disimpan.<br>Isi data di tab Input dulu.</p></div>`;return;}
+  let totLeads=0,totLevels=[0,0,0,0,0],intentTot=0,dc=0;
+  saved.forEach(d=>{dc++;totLeads+=d.total;d.levels.forEach((v,j)=>totLevels[j]+=v);intentTot+=d.levels[3]+d.levels[4];});
+  const intentPct=totLeads>0?(intentTot/totLeads*100).toFixed(1):0;
+  const highIdx=totLevels.indexOf(Math.max(...totLevels));
+  const cards=sessionData.map((d,i)=>{
+    if(!d.saved)return`<div class="day-summary-card dsc-empty"><div class="dsc-head"><div class="dsc-day">Hari ${i+1}</div></div><div style="font-size:13px;color:var(--text3)">Tiada data</div></div>`;
+    const lvRows=LEVELS.map((lv,j)=>{const pct=(d.levels[j]/d.total*100);return`<div class="dsc-lv"><div class="dsc-lv-dot" style="background:${lv.color}"></div><div class="dsc-lv-name">${lv.name}</div><div class="dsc-lv-bar"><div class="dsc-lv-fill" style="width:${Math.min(pct,100)}%;background:${lv.color}"></div></div><div class="dsc-lv-pct">${pct.toFixed(1)}%</div></div>`;}).join('');
+    return`<div class="day-summary-card"><div class="dsc-head"><div><div class="dsc-day">Hari ${i+1} ${d.date?'• '+d.date:''}</div>${d.adlink?`<div class="dsc-adlink">🔗 ${d.adlink}</div>`:''}</div><div><div class="dsc-total">${d.total}</div><div class="dsc-sub">leads</div></div></div><div class="dsc-levels">${lvRows}</div></div>`;
+  }).join('');
+  const l1a=totLeads>0?(totLevels[0]/totLeads*100):0;
+  let cls='amber',at='',ab='';
+  if(l1a>=40){cls='red';at='Perlu baiki iklan';ab=`${l1a.toFixed(0)}% leads berhenti di L1.`;}
+  else if(+intentPct>=25){cls='green';at='Buying intent bagus!';ab=`${intentPct}% leads tunjuk minat beli.`;}
+  else{cls='amber';at=`L${highIdx+1} paling banyak drop`;ab=`Perbaiki skrip di Level ${highIdx+1}.`;}
+  body.innerHTML=`
+    <div class="section"><div class="summary-strip"><div class="ss-title">Ringkasan ${dc} hari</div>
+      <div class="big-metric-row">
+        <div class="big-metric"><div class="bm-lbl">Total leads</div><div class="bm-val">${totLeads}</div><div class="bm-sub">${dc} hari</div></div>
+        <div class="big-metric"><div class="bm-lbl">Buying intent</div><div class="bm-val" style="color:var(--green)">${intentTot}</div><div class="bm-sub">${intentPct}%</div></div>
+      </div>
+      <div class="action-panel ${cls}"><div class="ap-title">${at}</div><div class="ap-body">${ab}</div></div>
+    </div></div>
+    <div class="section"><div class="section-label">Breakdown setiap hari</div>${cards}</div>`;
+}
+
+// ── ADMIN REAL-TIME ────────────────────────────────────────
+let allLeadsData = {};
+function setupAdminRealtime() {
+  const body = document.getElementById('admin-body');
+  body.innerHTML = `<div class="empty-state"><div class="loading-spinner" style="margin:0 auto"></div><p style="margin-top:12px">Memuatkan data real-time...</p></div>`;
+  if(adminUnsubscribe) adminUnsubscribe();
+  adminUnsubscribe = onSnapshot(collection(db, 'allLeads'), (snapshot) => {
+    allLeadsData = {};
+    snapshot.forEach(docSnap => {
+      const d = docSnap.data();
+      if(!allLeadsData[d.staffName]) allLeadsData[d.staffName] = { email:d.email, days:Array(DAYS).fill(null) };
+      if(d.dayIndex >= 1 && d.dayIndex <= DAYS) allLeadsData[d.staffName].days[d.dayIndex-1] = d;
+    });
+    renderAdminDashboard();
+  });
+}
+
+function renderAdminDashboard() {
+  const body = document.getElementById('admin-body');
+  const staffNames = Object.keys(allLeadsData);
+  if(!staffNames.length){
+    body.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><p>Tiada data lagi.<br>Tunggu staff submit data.</p></div>`;
+    return;
+  }
+
+  // Aggregate all data
+  let grandTotal=0, grandLevels=[0,0,0,0,0], grandIntent=0, totalEntries=0;
+  staffNames.forEach(name=>{
+    allLeadsData[name].days.forEach(d=>{
+      if(!d||!d.saved)return;
+      grandTotal+=d.total||0; grandIntent+=(d.levels[3]||0)+(d.levels[4]||0);
+      d.levels.forEach((v,j)=>grandLevels[j]+=v);
+      totalEntries++;
+    });
+  });
+  const grandIntentPct=grandTotal>0?(grandIntent/grandTotal*100).toFixed(1):0;
+  const highIdx=grandLevels.indexOf(Math.max(...grandLevels));
+
+  const chartRows=LEVELS.map((lv,i)=>{const pct=grandTotal>0?(grandLevels[i]/grandTotal*100):0;return`<div class="chart-row"><div class="chart-label">${lv.name}</div><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:${pct}%;background:${lv.color}">${pct>8?pct.toFixed(1)+'%':''}</div></div><div class="chart-pct">${pct.toFixed(1)}%</div></div>`;}).join('');
+
+  const tableRows=staffNames.flatMap(name=>{
+    return allLeadsData[name].days.map((d,i)=>{
+      if(!d||!d.saved)return'';
+      const intent=(d.levels[3]||0)+(d.levels[4]||0);
+      const iP=d.total>0?(intent/d.total*100).toFixed(1):0;
+      const l1p=d.total>0?((d.levels[0]||0)/d.total*100).toFixed(1):0;
+      const pillCls=+iP>=25?'intent-high':+iP>=10?'intent-mid':'intent-low';
+      const action=+l1p>=40?'⚠️ Baiki iklan':+iP>=25?'✅ Close offer':'🔍 Semak skrip';
+      const adCell=d.adlink?`<a href="${d.adlink}" target="_blank" class="ad-link-cell">🔗</a>`:'—';
+      return`<tr><td><strong>${name}</strong></td><td>H${i+1}</td><td>${d.total}</td><td><span class="intent-pill ${pillCls}">${iP}%</span></td><td><span class="action-pill">${action}</span></td><td>${adCell}</td></tr>`;
+    });
+  }).filter(Boolean).join('');
+
+  const l1a=grandTotal>0?(grandLevels[0]/grandTotal*100):0;
+  let cls='amber',at='',ab='';
+  if(l1a>=40){cls='red';at='Perlu baiki iklan';ab=`${l1a.toFixed(0)}% leads berhenti di Status (L1) — semak targeting iklan.`;}
+  else if(+grandIntentPct>=25){cls='green';at='Buying intent bagus secara keseluruhan!';ab=`${grandIntentPct}% leads tunjuk minat beli. Pastikan follow-up pantas.`;}
+  else{cls='amber';at=`Level ${highIdx+1} (${LEVELS[highIdx].name}) paling banyak drop`;ab=`Fokus perbaiki skrip di Level ${highIdx+1}.`;}
+
+  body.innerHTML=`
+    <div class="section" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="font-size:12px;color:var(--text3)"><span class="live-dot"></span>Real-time • ${staffNames.length} staff</div>
+    </div>
+    <div class="section">
+      <div class="admin-stat-row">
+        <div class="admin-stat"><div class="as-lbl">Total leads</div><div class="as-val">${grandTotal}</div><div class="as-sub">${totalEntries} submission</div></div>
+        <div class="admin-stat"><div class="as-lbl">Buying intent</div><div class="as-val" style="color:var(--green)">${grandIntent}</div><div class="as-sub">${grandIntentPct}%</div></div>
+        <div class="admin-stat"><div class="as-lbl">Drop tertinggi</div><div class="as-val" style="color:var(--red)">L${highIdx+1}</div><div class="as-sub">${LEVELS[highIdx].name}</div></div>
+        <div class="admin-stat"><div class="as-lbl">Staff aktif</div><div class="as-val">${staffNames.length}</div></div>
+      </div>
+    </div>
+    <div class="section"><div class="admin-chart"><div class="chart-title">Drop-off rate kumulatif semua staff</div>${chartRows}</div></div>
+    <div class="section"><div class="action-panel ${cls}" style="margin-bottom:10px"><div class="ap-title">${at}</div><div class="ap-body">${ab}</div></div></div>
+    <div class="section">
+      <div class="section-label">Data semua staff</div>
+      <div class="admin-table-wrap"><table class="admin-table">
+        <thead><tr><th>Staff</th><th>Hari</th><th>Leads</th><th>Intent</th><th>Action</th><th>Iklan</th></tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table></div>
+    </div>
+    <div class="section">
+      <button class="export-btn" onclick="exportAdminCSV()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Semua Data CSV
+      </button>
+    </div>`;
+}
+
+// ── EXPORT CSV (staff own) ─────────────────────────────────
+window.exportCSV = function() {
+  const name = curUser.displayName || curUser.email.split('@')[0];
+  const rows=[['Hari','Tarikh','Staff','Link Iklan','Total Leads','L1%','L2%','L3%','L4%','L5%','Buying Intent','Intent%']];
+  sessionData.forEach((d,i)=>{
+    const pcts=d.levels.map(v=>d.total>0?(v/d.total*100).toFixed(1)+'%':'0%');
+    const intent=d.levels[3]+d.levels[4];
+    const iP=d.total>0?(intent/d.total*100).toFixed(1)+'%':'0%';
+    rows.push([`Hari ${i+1}`,d.date||'',name,d.adlink||'',d.total,...pcts,intent,iP]);
+  });
+  dlCSV(rows, `wa_leads_${name}_${new Date().toISOString().split('T')[0]}.csv`);
+};
+
+// ── EXPORT CSV (admin all) ─────────────────────────────────
+window.exportAdminCSV = function() {
+  const rows=[['Staff','Email','Hari','Tarikh','Link Iklan','Total Leads','L1%','L2%','L3%','L4%','L5%','Buying Intent','Intent%']];
+  Object.keys(allLeadsData).forEach(name=>{
+    allLeadsData[name].days.forEach((d,i)=>{
+      if(!d||!d.saved)return;
+      const pcts=d.levels.map(v=>d.total>0?(v/d.total*100).toFixed(1)+'%':'0%');
+      const intent=(d.levels[3]||0)+(d.levels[4]||0);
+      const iP=d.total>0?(intent/d.total*100).toFixed(1)+'%':'0%';
+      rows.push([name,d.email||'',`Hari ${i+1}`,d.date||'',d.adlink||'',d.total,...pcts,intent,iP]);
+    });
+  });
+  dlCSV(rows, `wa_leads_admin_${new Date().toISOString().split('T')[0]}.csv`);
+};
+
+function dlCSV(rows, filename) {
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download=filename;a.click();
+}
+
+// ── TOAST ──────────────────────────────────────────────────
+window.showToast = function(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+};
+function showToast(msg){window.showToast(msg);}
+
 </script>
 </body>
 </html>
