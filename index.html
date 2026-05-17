@@ -207,6 +207,55 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .exp-lv-fill{height:100%;border-radius:3px}
 .exp-lv-val{font-size:11px;color:var(--text3);min-width:20px;text-align:right}
 .exp-lv-pct{font-size:11px;font-weight:600;color:var(--text);min-width:36px;text-align:right;font-family:'DM Mono',monospace}
+.filter-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.filter-panel-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.filter-select{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a8a69f' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.filter-select:focus{border-color:var(--accent)}
+.filter-date-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.filter-date-input{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none}
+.filter-date-input:focus{border-color:var(--accent)}
+.filter-date-label{font-size:11px;color:var(--text3);margin-bottom:4px}
+.filter-actions{display:flex;gap:8px;margin-top:10px}
+.filter-apply-btn{flex:1;padding:9px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#fff;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
+.filter-clear-btn{padding:9px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer}
+.refresh-btn{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.refresh-btn:active{background:var(--surface2)}
+.refresh-btn svg{width:13px;height:13px;transition:transform .4s}
+.refresh-btn.spinning svg{animation:spin .7s linear infinite}
+.active-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.af-pill{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent)}
+.af-pill button{background:none;border:none;color:var(--accent);cursor:pointer;font-size:14px;line-height:1;padding:0;display:flex;align-items:center}
+.ad-link-toggle{display:flex;align-items:center;gap:6px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--border)}
+.toggle-label{font-size:11px;color:var(--text3);flex:1}
+.toggle-switch{position:relative;width:36px;height:20px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:20px;cursor:pointer;transition:background .2s}
+.toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle-switch input:checked+.toggle-slider{background:var(--green)}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(16px)}
+.ad-status-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
+.ad-status-active{background:var(--green-bg);color:var(--green)}
+.ad-status-inactive{background:var(--surface2);color:var(--text3)}
+.prob-section{margin-top:4px}
+.prob-item{padding:13px 15px;border-bottom:1px solid var(--border)}
+.prob-item:last-child{border-bottom:none}
+.prob-top{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.prob-icon{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--surface2)}
+.prob-info{flex:1}
+.prob-name{font-size:13px;font-weight:500;color:var(--text)}
+.prob-bottom{display:flex;align-items:center;gap:9px}
+.prob-bar-track{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.prob-bar-fill{height:100%;border-radius:3px;transition:width .3s ease}
+.prob-pct{font-size:12px;font-weight:600;min-width:36px;text-align:right;color:var(--text3);font-family:'DM Mono',monospace}
+.prob-stepper{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0}
+.prob-val-inp{width:42px;text-align:center;font-size:15px;font-weight:600;color:var(--text);border:none;background:transparent;outline:none;font-family:'DM Sans',sans-serif;padding:0}
+.other-prob-input{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none;margin-top:8px}
+.other-prob-input:focus{border-color:var(--accent)}
+.prob-summary{background:var(--surface2);border-radius:var(--radius-sm);padding:11px 13px;margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.prob-summary-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.prob-summary-label{color:var(--text2)}
+.prob-summary-val{font-weight:600;color:var(--text)}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:5px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .avatar-dropdown{position:absolute;top:46px;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 24px var(--shadow);min-width:180px;overflow:hidden;z-index:300;display:none}
@@ -327,9 +376,19 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="section"><div class="section-label">Total leads masuk</div><div class="card"><div class="card-body"><div class="total-wrap"><input class="total-big" type="number" id="total" placeholder="0" min="0" oninput="recalc()"><span class="total-unit">leads</span></div><div id="remaining-area"></div></div></div></div>
       <div class="section"><div class="section-label">Leads berhenti di level mana?</div><div class="card" id="lv-list"></div></div>
       <div class="section" id="metrics-area"></div>
+      <div class="section">
+        <div class="section-label">Masalah Customer</div>
+        <div class="card">
+          <div class="prob-section" id="prob-section"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);padding:4px 2px">* Data berasingan dari level leads. Isi ikut masalah yang dinyatakan customer.</div>
+      </div>
       <div class="section"><button class="save-btn" id="save-btn" onclick="submitData()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Simpan & Hantar</button></div>
     </div>
     <div id="pane-report" style="display:none">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+        <button class="refresh-btn" onclick="refreshReport()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Refresh</button>
+      </div>
       <div id="report-body"></div>
       <div class="section"><button class="export-btn" onclick="exportCSV()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button></div>
     </div>
@@ -347,7 +406,7 @@ const FA=initializeApp(FC),auth=getAuth(FA),db=getFirestore(FA);
 const ADMIN=['ijatmariam92@gmail.com'];
 const LVS=[{n:'Status',d:'Hamil / Ikhtiar hamil',c:'#7c3aed',i:false},{n:'Problem',d:'Masalah yang dihadapi',c:'#2563eb',i:false},{n:'Testimoni',d:'Bukti & kisah kejayaan',c:'#0891b2',i:false},{n:'FAQ',d:'Soal jawab',c:'#d97706',i:true},{n:'Harga',d:'Tanya harga',c:'#dc2626',i:true},{n:'Buyer',d:'Convert to sales',c:'#16a34a',i:true,buyer:true}];
 const DAYS=5;
-let CU=null,isAdm=false,curDay=0,SD=ed(),adminUnsub=null,prof={name:'',position:'',phone:'',staffList:[]},selStaff=null,adLinks=[''],adminFilter='all';
+let CU=null,isAdm=false,curDay=0,SD=ed(),adminUnsub=null,prof={name:'',position:'',phone:'',staffList:[]},selStaff=null,adLinks=[{url:'',active:true}],adminFilterStaff='all',adminFilterSup='all',adminDateFrom='',adminDateTo='',probData={hb:0,alahan:0,lesu:0,lain:0,lainText:''};
 function ed(){return Array.from({length:DAYS},()=>({staffName:'',date:'',adLinks:[],total:0,levels:[0,0,0,0,0],saved:false}));}
 window.toggleDark=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
 function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('wa_theme',t);const m='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';const s='<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';['dark-icon-auth','dark-icon-app'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=t==='dark'?s:m;});}
@@ -390,16 +449,25 @@ async function saveDF(idx){const d=SD[idx],nm=prof.name||CU.email.split('@')[0],
 window.goTab=function(t){['input','report','admin'].forEach(id=>{document.getElementById('pane-'+id).style.display=t===id?'block':'none';const b=document.getElementById('nav-'+id);if(b)b.classList.toggle('active',t===id);});if(t==='report')renderRep();if(t==='admin'&&isAdm)setupAdmin();};
 function buildDS(){const row=document.getElementById('day-row');row.innerHTML=SD.map((d,i)=>`<button class="day-pill${i===curDay?' active':''}${d.saved?' saved':''}" onclick="selDay(${i})"><span class="dp-num">Hari ${i+1}</span><span>${d.saved?(d.staffName||'✓'):'—'}</span></button>`).join('');const f=SD.filter(d=>d.saved).length;document.getElementById('prog-bar').innerHTML=Array.from({length:DAYS},(_,i)=>`<div class="pb-seg${SD[i].saved?' filled':''}"></div>`).join('');document.getElementById('prog-label').textContent=`${f} / ${DAYS} hari diisi`;}
 window.selDay=function(i){curDay=i;buildDS();loadDTF(i);};
-function loadDTF(i){const d=SD[i];if(d.staffName&&prof.staffList.includes(d.staffName))selStaff=d.staffName;document.getElementById('entry-date').value=d.date||new Date().toISOString().split('T')[0];adLinks=d.adLinks&&d.adLinks.length?[...d.adLinks]:[''];buildAL();LVS.forEach((_,j)=>{const el=document.getElementById('lv'+j);if(el)el.value=d.levels[j]||0;});document.getElementById('total').value=d.total||'';buildSS();recalc();}
-function buildAL(){const list=document.getElementById('adlinks-list');list.innerHTML=adLinks.map((lnk,i)=>`<div class="ad-link-row"><input class="ad-link-input" type="url" value="${lnk}" placeholder="https://facebook.com/ads/..." oninput="updAL(${i},this.value)">${lnk?`<a href="${lnk}" target="_blank" class="ad-link-open" title="Buka link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`:''} ${adLinks.length>1?`<button class="ad-link-del" onclick="remAL(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`:''}</div>`).join('');}
-window.addAdLink=function(){adLinks.push('');buildAL();};
-window.remAL=function(i){adLinks.splice(i,1);if(!adLinks.length)adLinks=[''];buildAL();autosave();};
-window.updAL=function(i,v){adLinks[i]=v;buildAL();autosave();};
+function loadDTF(i){const d=SD[i];if(d.staffName&&prof.staffList.includes(d.staffName))selStaff=d.staffName;document.getElementById('entry-date').value=d.date||new Date().toISOString().split('T')[0];adLinks=d.adLinks&&d.adLinks.length?d.adLinks.map(l=>typeof l==='string'?{url:l,active:true}:l):[{url:'',active:true}];probData=d.problems?{...{hb:0,alahan:0,lesu:0,lain:0,lainText:''},...d.problems}:{hb:0,alahan:0,lesu:0,lain:0,lainText:''};buildAL();LVS.forEach((_,j)=>{const el=document.getElementById('lv'+j);if(el)el.value=d.levels[j]||0;});document.getElementById('total').value=d.total||'';buildSS();recalc();buildProbs();}
+function buildAL(){const list=document.getElementById('adlinks-list');list.innerHTML=adLinks.map((lnk,i)=>{const url=lnk.url||'';const active=lnk.active!==false;return`<div style="margin-bottom:10px;padding:10px 12px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid ${active?'var(--border)':'var(--red)'}">
+<div class="ad-link-row" style="margin-bottom:0">
+<input class="ad-link-input" type="url" value="${url}" placeholder="https://facebook.com/ads/..." oninput="updAL(${i},'url',this.value)">
+${url?`<a href="${url}" target="_blank" class="ad-link-open" title="Buka link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`:''}
+${adLinks.length>1?`<button class="ad-link-del" onclick="remAL(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`:''}
+</div>
+<div class="ad-link-toggle">
+<span class="toggle-label">Status iklan: <span class="ad-status-badge ${active?'ad-status-active':'ad-status-inactive'}">${active?'Aktif':'Tidak Aktif'}</span></span>
+<label class="toggle-switch"><input type="checkbox" ${active?'checked':''} onchange="updAL(${i},'active',this.checked)"><span class="toggle-slider"></span></label>
+</div></div>`;}).join('');}
+window.addAdLink=function(){adLinks.push({url:'',active:true});buildAL();};
+window.remAL=function(i){adLinks.splice(i,1);if(!adLinks.length)adLinks=[{url:'',active:true}];buildAL();autosave();};
+window.updAL=function(i,field,v){if(!adLinks[i])adLinks[i]={url:'',active:true};adLinks[i][field]=v;buildAL();autosave();};
 function buildLvs(){document.getElementById('lv-list').innerHTML=LVS.map((lv,i)=>`<div class="lv-item"><div class="lv-top"><div class="lv-num" style="background:${lv.c}">${i+1}</div><div class="lv-info"><div class="lv-name">${lv.n}${lv.i?' <span class="lv-tag">Buying signal</span>':''}</div><div class="lv-desc">${lv.d}</div></div></div><div class="lv-bottom"><div style="flex:1"><div class="lv-bar-track"><div class="lv-bar-fill" id="bar${i}" style="background:${lv.c}"></div></div></div><div class="lv-pct" id="pct${i}">—</div><div class="stepper"><button class="step-btn" id="minus${i}" onmousedown="sH(${i},-1)" onmouseup="stH()" onmouseleave="stH()" ontouchstart="sH(${i},-1)" ontouchend="stH()">−</button><input class="step-val-inp" type="number" id="lv${i}" value="0" min="0" oninput="recalc()"><button class="step-btn" id="plus${i}" onmousedown="sH(${i},1)" onmouseup="stH()" onmouseleave="stH()" ontouchstart="sH(${i},1)" ontouchend="stH()">+</button></div></div></div>`).join('');}
 let hT,hI;window.sH=function(i,d){dS(i,d);hT=setTimeout(()=>{hI=setInterval(()=>dS(i,d),80)},400);};window.stH=function(){clearTimeout(hT);clearInterval(hI);};
 function dS(i,d){const el=document.getElementById('lv'+i),tot=+document.getElementById('total').value||0,oth=LVS.reduce((s,_,j)=>s+(j===i?0:(+document.getElementById('lv'+j).value||0)),0);el.value=Math.max(0,Math.min((+el.value||0)+d,tot-oth));recalc();}
 window.recalc=function(){autosave();const tot=+document.getElementById('total').value||0,vals=LVS.map((_,i)=>+document.getElementById('lv'+i).value||0),asgn=vals.reduce((a,b)=>a+b,0),rem=tot-asgn,ra=document.getElementById('remaining-area');if(tot>0){let cls=rem>0?'':rem===0?'exact':'over',msg=rem>0?`${rem} leads belum dikategorikan`:rem===0?'✓ Semua leads dikategorikan':`⚠ Melebihi ${Math.abs(rem)} leads`;ra.innerHTML=`<div class="remaining-badge ${cls}">${msg}</div>`;}else ra.innerHTML='';LVS.forEach((_,i)=>{const oth=vals.reduce((s,v,j)=>s+(j===i?0:v),0),canAdd=tot>0&&vals[i]<(tot-oth),pb=document.getElementById('plus'+i);if(pb){pb.style.opacity=canAdd?'1':'0.3';pb.style.pointerEvents=canAdd?'auto':'none';}const pct=tot>0?vals[i]/tot*100:0;document.getElementById('bar'+i).style.width=Math.min(pct,100)+'%';const pEl=document.getElementById('pct'+i);pEl.textContent=tot>0?pct.toFixed(1)+'%':'—';pEl.style.color=pct>40?'var(--red)':pct>20?'var(--amber)':'var(--green)';});renderMet(tot,vals);};
-function autosave(){const d=SD[curDay];d.staffName=selStaff||'';d.date=document.getElementById('entry-date').value;d.adLinks=[...adLinks.filter(l=>l.trim())];d.total=+document.getElementById('total').value||0;d.levels=LVS.map((_,i)=>+document.getElementById('lv'+i).value||0);}
+function autosave(){const d=SD[curDay];d.staffName=selStaff||'';d.date=document.getElementById('entry-date').value;d.adLinks=[...adLinks.filter(l=>l.url&&l.url.trim())];d.total=+document.getElementById('total').value||0;d.levels=LVS.map((_,i)=>+document.getElementById('lv'+i).value||0);d.problems={hb:+document.getElementById('prob-hb')?.value||0,alahan:+document.getElementById('prob-alahan')?.value||0,lesu:+document.getElementById('prob-lesu')?.value||0,lain:+document.getElementById('prob-lain')?.value||0,lainText:document.getElementById('prob-lain-text')?.value||''};}
 function renderMet(tot,vals){const area=document.getElementById('metrics-area');if(!tot){area.innerHTML='';return;}
 const intent=vals[3]+vals[4],iP=intent/tot*100,buyer=vals[5]||0,buyerP=tot>0?buyer/tot*100:0,uc=Math.max(0,tot-vals.reduce((a,b)=>a+b,0)),l1=vals[0]/tot*100;
 let cls='amber',ti='',bo='';
@@ -409,16 +477,107 @@ else if(l1>=40){cls='red';ti='Perlu baiki iklan segera';bo=`${l1.toFixed(0)}% le
 else if(iP>=25){cls='green';ti='Buying intent tinggi — close sekarang!';bo=`${iP.toFixed(0)}% leads sampai ke FAQ/Harga. Signal pembelian kuat. Follow up dan close offer segera.`;}
 else{cls='amber';ti='Semak skrip WA setiap level';bo='Cari level yang paling banyak drop dan perbaiki skrip di bahagian tersebut.';}
 area.innerHTML=`<div class="section-label">Ringkasan hari ini</div><div class="metric-row" style="margin-bottom:9px"><div class="metric-card"><div class="mc-lbl">Total leads</div><div class="mc-val">${tot}</div></div><div class="metric-card"><div class="mc-lbl">Buyer (Sales)</div><div class="mc-val" style="color:var(--green)">${buyer}</div><div class="mc-sub">${buyerP.toFixed(1)}% convert</div></div><div class="metric-card"><div class="mc-lbl">Buying intent</div><div class="mc-val" style="color:var(--accent)">${intent}</div><div class="mc-sub">${iP.toFixed(1)}%</div></div></div><div class="action-panel ${cls}"><div class="ap-title">${ti}</div><div class="ap-body">${bo}</div></div>`;}
+function buildProbs(){
+  const probs=[
+    {id:'hb',icon:'🩸',name:'HB Low (Darah Rendah)',color:'#dc2626'},
+    {id:'alahan',icon:'🤧',name:'Masalah Alahan',color:'#d97706'},
+    {id:'lesu',icon:'😴',name:'Letih & Lesu',color:'#7c3aed'},
+    {id:'lain',icon:'📝',name:'Lain-lain',color:'#0891b2'},
+  ];
+  const sect=document.getElementById('prob-section');if(!sect)return;
+  sect.innerHTML=probs.map((p,i)=>`
+    <div class="prob-item">
+      <div class="prob-top">
+        <div class="prob-icon">${p.icon}</div>
+        <div class="prob-info"><div class="prob-name">${p.name}</div></div>
+      </div>
+      <div class="prob-bottom">
+        <div style="flex:1"><div class="prob-bar-track"><div class="prob-bar-fill" id="pbar-${p.id}" style="background:${p.color}"></div></div></div>
+        <div class="prob-pct" id="ppct-${p.id}">—</div>
+        <div class="prob-stepper">
+          <button class="step-btn" onmousedown="sHP('${p.id}',-1)" onmouseup="stH()" onmouseleave="stH()" ontouchstart="sHP('${p.id}',-1)" ontouchend="stH()">−</button>
+          <input class="prob-val-inp" type="number" id="prob-${p.id}" value="${probData[p.id]||0}" min="0" oninput="recalcProb()">
+          <button class="step-btn" onmousedown="sHP('${p.id}',1)" onmouseup="stH()" onmouseleave="stH()" ontouchstart="sHP('${p.id}',1)" ontouchend="stH()">+</button>
+        </div>
+      </div>
+      ${p.id==='lain'?`<input class="other-prob-input" type="text" id="prob-lain-text" placeholder="Nyatakan masalah lain..." value="${probData.lainText||''}" oninput="autosave()">`:''} 
+    </div>`).join('');
+  recalcProb();
+}
+function recalcProb(){
+  const ids=['hb','alahan','lesu','lain'];
+  const vals=ids.map(id=>+document.getElementById('prob-'+id)?.value||0);
+  const tot=vals.reduce((a,b)=>a+b,0);
+  const colors=['#dc2626','#d97706','#7c3aed','#0891b2'];
+  ids.forEach((id,i)=>{
+    const pct=tot>0?vals[i]/tot*100:0;
+    const bar=document.getElementById('pbar-'+id);const pct_el=document.getElementById('ppct-'+id);
+    if(bar)bar.style.width=Math.min(pct,100)+'%';
+    if(pct_el){pct_el.textContent=tot>0?pct.toFixed(1)+'%':'—';pct_el.style.color=colors[i];}
+  });
+  autosave();
+}
+window.sHP=function(id,d){
+  const el=document.getElementById('prob-'+id);
+  el.value=Math.max(0,(+el.value||0)+d);
+  recalcProb();
+};
 window.submitData=async function(){if(!selStaff){showToast('Pilih staff dulu');return;}const d=SD[curDay];if(!d.total){showToast('Masukkan jumlah leads');return;}const btn=document.getElementById('save-btn');btn.classList.add('loading');btn.innerHTML='<span>Menghantar...</span>';try{d.saved=true;d.date=document.getElementById('entry-date').value;await saveDF(curDay);buildDS();showToast('✓ Data berjaya disimpan!');setTimeout(()=>{selStaff=null;adLinks=[''];document.getElementById('total').value='';document.getElementById('entry-date').value=new Date().toISOString().split('T')[0];LVS.forEach((_,i)=>{const el=document.getElementById('lv'+i);if(el)el.value=0;});document.getElementById('metrics-area').innerHTML='';document.getElementById('remaining-area').innerHTML='';SD[curDay]={...SD[curDay],staffName:'',adLinks:[],total:0,levels:[0,0,0,0,0]};buildSS();buildAL();recalc();},1500);}catch(e){showToast('Gagal simpan');}btn.classList.remove('loading');btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Simpan & Hantar';};
-function renderRep(){const body=document.getElementById('report-body'),saved=SD.filter(d=>d.saved);if(!saved.length){body.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><p>Belum ada data.</p></div>';return;}let tL=0,tLv=[0,0,0,0,0],iT=0;saved.forEach(d=>{tL+=d.total;d.levels.forEach((v,j)=>tLv[j]+=v);iT+=d.levels[3]+d.levels[4];});const iP=tL>0?(iT/tL*100).toFixed(1):0,hI=tLv.indexOf(Math.max(...tLv));const cards=SD.map((d,i)=>{if(!d.saved)return`<div class="day-summary-card dsc-empty"><div class="dsc-head"><div class="dsc-day">Hari ${i+1}</div></div><div style="font-size:13px;color:var(--text3)">Tiada data</div></div>`;const lrs=LVS.map((lv,j)=>{const p=d.levels[j]/d.total*100;return`<div class="dsc-lv"><div class="dsc-lv-dot" style="background:${lv.c}"></div><div class="dsc-lv-name">${lv.n}</div><div class="dsc-lv-bar"><div class="dsc-lv-fill" style="width:${Math.min(p,100)}%;background:${lv.c}"></div></div><div class="dsc-lv-pct">${p.toFixed(1)}%</div></div>`;}).join('');const lks=d.adLinks&&d.adLinks.length?`<div class="dsc-adlinks">${d.adLinks.map(l=>`<a href="${l}" target="_blank" class="dsc-adlink">🔗 ${l.replace(/^https?:\/\//,'').substring(0,40)}${l.length>53?'...':''}</a>`).join('')}</div>`:'';return`<div class="day-summary-card"><div class="dsc-head"><div><div class="dsc-day">Hari ${i+1}${d.date?' • '+d.date:''}</div><div class="dsc-staff-name">${d.staffName||'—'}</div>${lks}</div><div><div class="dsc-total">${d.total}</div><div class="dsc-sub">leads</div></div></div><div class="dsc-levels">${lrs}</div><div class="confirm-del" id="cdel-${i}"><p>⚠ Padam data Hari ${i+1}? Tindakan ini tidak boleh diundur.</p><div class="confirm-del-row"><button class="confirm-yes" onclick="delDay(${i})">Ya, Padam</button><button class="confirm-no" onclick="hideConfirm(${i})">Batal</button></div></div><button class="del-day-btn" onclick="showConfirm(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Padam data hari ini</button></div>`;}).join('');const l1a=tL>0?tLv[0]/tL*100:0,buyerTot=tLv[5]||0,buyerPct=tL>0?(buyerTot/tL*100):0;let cls='amber',at='',ab='';if(buyerPct>=20){cls='green';at=`Iklan bagus — ${buyerPct.toFixed(0)}% convert jadi Buyer!`;ab=`Dalam ${saved.length} hari, ${buyerTot} leads berjaya jadi pembeli. Iklan performing well.`;}else if(buyerPct>0){cls='amber';at=`Conversion ${buyerPct.toFixed(0)}% — boleh ditingkatkan`;ab=`${buyerTot} leads jadi Buyer. Optimize follow-up dan closing skrip untuk tingkatkan lagi.`;}else if(l1a>=40){cls='red';at='Perlu baiki iklan';ab=`${l1a.toFixed(0)}% leads berhenti di L1 — semak targeting iklan.`;}else if(+iP>=25){cls='green';at='Buying intent bagus!';ab=`${iP}% leads tunjuk minat beli.`;}else{cls='amber';at=`L${hI+1} paling banyak drop`;ab=`Perbaiki skrip di Level ${hI+1}.`;}body.innerHTML=`<div class="section"><div class="summary-strip"><div class="ss-title">Ringkasan ${saved.length} hari</div><div class="big-metric-row"><div class="big-metric"><div class="bm-lbl">Total leads</div><div class="bm-val">${tL}</div><div class="bm-sub">${saved.length} hari</div></div><div class="big-metric"><div class="bm-lbl">Buying intent</div><div class="bm-val" style="color:var(--green)">${iT}</div><div class="bm-sub">${iP}%</div></div></div><div class="action-panel ${cls}"><div class="ap-title">${at}</div><div class="ap-body">${ab}</div></div></div></div><div class="section"><div class="section-label">Breakdown setiap hari</div>${cards}</div>`;}
+function renderRep(){const body=document.getElementById('report-body'),saved=SD.filter(d=>d.saved);if(!saved.length){body.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><p>Belum ada data.</p></div>';return;}let tL=0,tLv=[0,0,0,0,0],iT=0;saved.forEach(d=>{tL+=d.total;d.levels.forEach((v,j)=>tLv[j]+=v);iT+=d.levels[3]+d.levels[4];});const iP=tL>0?(iT/tL*100).toFixed(1):0,hI=tLv.indexOf(Math.max(...tLv));const cards=SD.map((d,i)=>{if(!d.saved)return`<div class="day-summary-card dsc-empty"><div class="dsc-head"><div class="dsc-day">Hari ${i+1}</div></div><div style="font-size:13px;color:var(--text3)">Tiada data</div></div>`;const lrs=LVS.map((lv,j)=>{const p=d.levels[j]/d.total*100;return`<div class="dsc-lv"><div class="dsc-lv-dot" style="background:${lv.c}"></div><div class="dsc-lv-name">${lv.n}</div><div class="dsc-lv-bar"><div class="dsc-lv-fill" style="width:${Math.min(p,100)}%;background:${lv.c}"></div></div><div class="dsc-lv-pct">${p.toFixed(1)}%</div></div>`;}).join('');const lks=d.adLinks&&d.adLinks.length?`<div class="dsc-adlinks">${d.adLinks.map(l=>{const url=typeof l==='string'?l:(l.url||'');const active=typeof l==='string'?true:(l.active!==false);return url?`<a href="${url}" target="_blank" class="dsc-adlink">${active?'🟢':'🔴'} ${url.replace(/^https?:\/\//,'').substring(0,38)}${url.length>51?'...':''}</a>`:''}).filter(Boolean).join('')}</div>`:'';const pr=d.problems||{};const prTot=(pr.hb||0)+(pr.alahan||0)+(pr.lesu||0)+(pr.lain||0);const probSummary=prTot>0?`<div class="prob-summary"><div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Masalah Customer</div>${[{id:'hb',icon:'🩸',n:'HB Low'},{id:'alahan',icon:'🤧',n:'Alahan'},{id:'lesu',icon:'😴',n:'Letih/Lesu'},{id:'lain',icon:'📝',n:'Lain-lain'}].map(p=>pr[p.id]?`<div class="prob-summary-row"><span class="prob-summary-label">${p.icon} ${p.n}${p.id==='lain'&&pr.lainText?' ('+pr.lainText+')'':''}</span><span class="prob-summary-val">${pr[p.id]} (${prTot>0?(pr[p.id]/prTot*100).toFixed(0):'0'}%)</span></div>`:'').filter(Boolean).join('')}</div>`:'';
+return`<div class="day-summary-card"><div class="dsc-head"><div><div class="dsc-day">Hari ${i+1}${d.date?' • '+d.date:''}</div><div class="dsc-staff-name">${d.staffName||'—'}</div>${lks}</div><div><div class="dsc-total">${d.total}</div><div class="dsc-sub">leads</div></div></div><div class="dsc-levels">${lrs}</div>${probSummary}<div class="confirm-del" id="cdel-${i}"><p>⚠ Padam data Hari ${i+1}? Tindakan ini tidak boleh diundur.</p><div class="confirm-del-row"><button class="confirm-yes" onclick="delDay(${i})">Ya, Padam</button><button class="confirm-no" onclick="hideConfirm(${i})">Batal</button></div></div><button class="del-day-btn" onclick="showConfirm(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Padam data hari ini</button></div>`;}).join('');const l1a=tL>0?tLv[0]/tL*100:0,buyerTot=tLv[5]||0,buyerPct=tL>0?(buyerTot/tL*100):0;let cls='amber',at='',ab='';if(buyerPct>=20){cls='green';at=`Iklan bagus — ${buyerPct.toFixed(0)}% convert jadi Buyer!`;ab=`Dalam ${saved.length} hari, ${buyerTot} leads berjaya jadi pembeli. Iklan performing well.`;}else if(buyerPct>0){cls='amber';at=`Conversion ${buyerPct.toFixed(0)}% — boleh ditingkatkan`;ab=`${buyerTot} leads jadi Buyer. Optimize follow-up dan closing skrip untuk tingkatkan lagi.`;}else if(l1a>=40){cls='red';at='Perlu baiki iklan';ab=`${l1a.toFixed(0)}% leads berhenti di L1 — semak targeting iklan.`;}else if(+iP>=25){cls='green';at='Buying intent bagus!';ab=`${iP}% leads tunjuk minat beli.`;}else{cls='amber';at=`L${hI+1} paling banyak drop`;ab=`Perbaiki skrip di Level ${hI+1}.`;}body.innerHTML=`<div class="section"><div class="summary-strip"><div class="ss-title">Ringkasan ${saved.length} hari</div><div class="big-metric-row"><div class="big-metric"><div class="bm-lbl">Total leads</div><div class="bm-val">${tL}</div><div class="bm-sub">${saved.length} hari</div></div><div class="big-metric"><div class="bm-lbl">Buying intent</div><div class="bm-val" style="color:var(--green)">${iT}</div><div class="bm-sub">${iP}%</div></div></div><div class="action-panel ${cls}"><div class="ap-title">${at}</div><div class="ap-body">${ab}</div></div></div></div><div class="section"><div class="section-label">Breakdown setiap hari</div>${cards}</div>`;}
 let ALD={};
 function setupAdmin(){document.getElementById('admin-body').innerHTML='<div class="empty-state"><div class="loading-spinner" style="margin:0 auto"></div><p style="margin-top:12px">Memuatkan...</p></div>';if(adminUnsub)adminUnsub();adminUnsub=onSnapshot(collection(db,'allLeads'),(snap)=>{ALD={};snap.forEach(ds=>{const d=ds.data(),k=d.staffName||d.supervisorName||'Unknown';if(!ALD[k])ALD[k]={sup:d.supervisorName||'',em:d.supervisorEmail||'',days:Array(DAYS).fill(null)};if(d.dayIndex>=1&&d.dayIndex<=DAYS)ALD[k].days[d.dayIndex-1]=d;});renderAdmin();});}
-function renderAdmin(){const body=document.getElementById('admin-body'),names=Object.keys(ALD);if(!names.length){body.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><p>Tiada data lagi.</p></div>';return;}const sups=['all',...new Set(Object.values(ALD).map(d=>d.sup).filter(Boolean))];const fNames=adminFilter==='all'?names:names.filter(n=>ALD[n].sup===adminFilter);let gT=0,gL=[0,0,0,0,0],gI=0,gE=0;fNames.forEach(n=>{ALD[n].days.forEach(d=>{if(!d||!d.saved)return;gT+=d.total||0;gI+=(d.levels[3]||0)+(d.levels[4]||0);d.levels.forEach((v,j)=>gL[j]+=v);gE++;});});const gIP=gT>0?(gI/gT*100).toFixed(1):0,hIdx=gL.indexOf(Math.max(...gL));
-const fps=sups.map(s=>`<button class="filter-pill${adminFilter===s?' active':''}" onclick="setAF('${s}')">${s==='all'?'Semua':s}</button>`).join('');
+function renderAdmin(){const body=document.getElementById('admin-body'),names=Object.keys(ALD);if(!names.length){body.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><p>Tiada data lagi.</p></div>';return;}const sups=[...new Set(Object.values(ALD).map(d=>d.sup).filter(Boolean))];
+const fNames=names.filter(n=>{
+  if(adminFilterStaff&&adminFilterStaff!=='all'&&n!==adminFilterStaff)return false;
+  if(adminFilterSup&&adminFilterSup!=='all'&&ALD[n].sup!==adminFilterSup)return false;
+  return true;
+});
+// Apply date filter to days
+const dayFilter=(d)=>{
+  if(!d||!d.saved)return false;
+  if(adminDateFrom&&d.date&&d.date<adminDateFrom)return false;
+  if(adminDateTo&&d.date&&d.date>adminDateTo)return false;
+  return true;
+};let gT=0,gL=[0,0,0,0,0],gI=0,gE=0;fNames.forEach(n=>{ALD[n].days.forEach(d=>{if(!d||!d.saved)return;gT+=d.total||0;gI+=(d.levels[3]||0)+(d.levels[4]||0);d.levels.forEach((v,j)=>gL[j]+=v);gE++;});});const gIP=gT>0?(gI/gT*100).toFixed(1):0,hIdx=gL.indexOf(Math.max(...gL));
+
 const cr=LVS.map((lv,i)=>{const p=gT>0?gL[i]/gT*100:0;return`<div class="chart-row"><div class="chart-label">${lv.n}</div><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:${p}%;background:${lv.c}">${p>8?p.toFixed(1)+'%':''}</div></div><div class="chart-pct">${p.toFixed(1)}%</div></div>`;}).join('');
-const expCards=fNames.flatMap(sn=>ALD[sn].days.map((d,i)=>{if(!d||!d.saved)return'';const int=(d.levels[3]||0)+(d.levels[4]||0),iP=d.total>0?(int/d.total*100).toFixed(1):0,pc=+iP>=25?'intent-high':+iP>=10?'intent-mid':'intent-low',cid=`exp_${sn.replace(/\W/g,'_')}_${i}`;const lrs=LVS.map((lv,j)=>{const p=d.total>0?(d.levels[j]||0)/d.total*100:0;return`<div class="exp-lv"><div class="exp-lv-dot" style="background:${lv.c}"></div><div class="exp-lv-name">${lv.n}</div><div class="exp-lv-bar"><div class="exp-lv-fill" style="width:${Math.min(p,100)}%;background:${lv.c}"></div></div><div class="exp-lv-val">${d.levels[j]||0}</div><div class="exp-lv-pct">${p.toFixed(1)}%</div></div>`;}).join('');const lks=d.adLinks&&d.adLinks.length?d.adLinks.map(l=>`<a href="${l}" target="_blank" class="exp-adlink">🔗 ${l.replace(/^https?:\/\//,'').substring(0,45)}${l.length>58?'...':''}</a>`).join(''):'<span style="font-size:12px;color:var(--text3)">Tiada link iklan</span>';return`<div class="exp-card"><div class="exp-header" onclick="togExp('${cid}')"><div class="exp-left"><div class="exp-day">Hari ${i+1}${d.date?' • '+d.date:''}</div><div class="exp-staff">${sn} <span style="font-size:11px;color:var(--text3)">(${d.supervisorName||''})</span></div></div><div class="exp-right"><div><div class="exp-total">${d.total}</div><div style="font-size:10px;color:var(--text3);text-align:right">leads</div></div><span class="intent-pill ${pc}">${iP}%</span><svg class="exp-chevron" id="chev_${cid}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div></div><div class="exp-body" id="${cid}"><div class="exp-adlinks">${lks}</div><div class="exp-levels">${lrs}</div><div class="confirm-del" id="acdel_${cid}"><p>⚠ Padam data ${sn} Hari ${i+1}? Tidak boleh diundur.</p><div class="confirm-del-row"><button class="confirm-yes" onclick="admDelDay('${d.uid}',${i},'${cid}')">Ya, Padam</button><button class="confirm-no" onclick="hideAdmConfirm('${cid}')">Batal</button></div></div><button class="del-day-btn" onclick="showAdmConfirm('${cid}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Padam data ini</button></div></div>`;}).filter(Boolean)).join('');
+const expCards=fNames.flatMap(sn=>ALD[sn].days.map((d,i)=>{if(!dayFilter(d))return'';const int=(d.levels[3]||0)+(d.levels[4]||0),iP=d.total>0?(int/d.total*100).toFixed(1):0,pc=+iP>=25?'intent-high':+iP>=10?'intent-mid':'intent-low',cid=`exp_${sn.replace(/\W/g,'_')}_${i}`;const lrs=LVS.map((lv,j)=>{const p=d.total>0?(d.levels[j]||0)/d.total*100:0;return`<div class="exp-lv"><div class="exp-lv-dot" style="background:${lv.c}"></div><div class="exp-lv-name">${lv.n}</div><div class="exp-lv-bar"><div class="exp-lv-fill" style="width:${Math.min(p,100)}%;background:${lv.c}"></div></div><div class="exp-lv-val">${d.levels[j]||0}</div><div class="exp-lv-pct">${p.toFixed(1)}%</div></div>`;}).join('');const lks=d.adLinks&&d.adLinks.length?d.adLinks.map(l=>{const url=typeof l==='string'?l:(l.url||'');const active=typeof l==='string'?true:(l.active!==false);return url?`<a href="${url}" target="_blank" class="exp-adlink">${active?'🟢':'🔴'} ${url.replace(/^https?:\/\//,'').substring(0,45)}${url.length>58?'...':''}</a>`:''}).filter(Boolean).join('')||'<span style="font-size:12px;color:var(--text3)">Tiada link iklan</span>':'<span style="font-size:12px;color:var(--text3)">Tiada link iklan</span>';const dpr=d.problems||{};const dprTot=(dpr.hb||0)+(dpr.alahan||0)+(dpr.lesu||0)+(dpr.lain||0);const adminProbHtml=dprTot>0?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Masalah Customer</div>${[{id:'hb',icon:'🩸',n:'HB Low'},{id:'alahan',icon:'🤧',n:'Alahan'},{id:'lesu',icon:'😴',n:'Lesu'},{id:'lain',icon:'📝',n:'Lain-lain'}].map(p=>dpr[p.id]?`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span style="color:var(--text2)">${p.icon} ${p.n}${p.id==='lain'&&dpr.lainText?' ('+dpr.lainText+')'':''}</span><span style="font-weight:600">${dpr[p.id]} (${dprTot>0?(dpr[p.id]/dprTot*100).toFixed(0):0}%)</span></div>`:'').filter(Boolean).join('')}</div>`:'';
+return`<div class="exp-card"><div class="exp-header" onclick="togExp('${cid}')"><div class="exp-left"><div class="exp-day">Hari ${i+1}${d.date?' • '+d.date:''}</div><div class="exp-staff">${sn} <span style="font-size:11px;color:var(--text3)">(${d.supervisorName||''})</span></div></div><div class="exp-right"><div><div class="exp-total">${d.total}</div><div style="font-size:10px;color:var(--text3);text-align:right">leads</div></div><span class="intent-pill ${pc}">${iP}%</span><svg class="exp-chevron" id="chev_${cid}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div></div><div class="exp-body" id="${cid}"><div class="exp-adlinks">${lks}</div><div class="exp-levels">${lrs}</div>${adminProbHtml}<div class="confirm-del" id="acdel_${cid}"><p>⚠ Padam data ${sn} Hari ${i+1}? Tidak boleh diundur.</p><div class="confirm-del-row"><button class="confirm-yes" onclick="admDelDay('${d.uid}',${i},'${cid}')">Ya, Padam</button><button class="confirm-no" onclick="hideAdmConfirm('${cid}')">Batal</button></div></div><button class="del-day-btn" onclick="showAdmConfirm('${cid}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Padam data ini</button></div></div>`;}).filter(Boolean)).join('');
 const l1a=gT>0?gL[0]/gT*100:0,buyerG=gL[5]||0,buyerGP=gT>0?(buyerG/gT*100):0;let cls='amber',at='',ab='';if(buyerGP>=20){cls='green';at=`Iklan bagus — ${buyerGP.toFixed(0)}% convert jadi Buyer!`;ab=`${buyerG} leads berjaya jadi pembeli. Iklan-iklan semasa performing well — pertimbangkan tambah bajet.`;}else if(buyerGP>0){cls='amber';at=`Conversion ${buyerGP.toFixed(0)}% — boleh ditingkatkan`;ab=`${buyerG} leads jadi Buyer setakat ini. Semak follow-up dan closing skrip untuk tingkatkan conversion.`;}else if(l1a>=40){cls='red';at='Perlu baiki iklan';ab=`${l1a.toFixed(0)}% leads berhenti di L1 — semak targeting iklan.`;}else if(+gIP>=25){cls='green';at='Buying intent bagus!';ab=`${gIP}% leads tunjuk minat beli.`;}else{cls='amber';at=`L${hIdx+1} paling banyak drop`;ab=`Perbaiki skrip di Level ${hIdx+1}.`;}
-body.innerHTML=`<div class="section" style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;color:var(--text3)"><span class="live-dot"></span>Real-time • ${names.length} staff</div></div><div class="section"><div class="admin-stat-row"><div class="admin-stat"><div class="as-lbl">Total leads</div><div class="as-val">${gT}</div><div class="as-sub">${gE} entri</div></div><div class="admin-stat"><div class="as-lbl">Buying intent</div><div class="as-val" style="color:var(--green)">${gI}</div><div class="as-sub">${gIP}%</div></div><div class="admin-stat"><div class="as-lbl">Buyer (Sales)</div><div class="as-val" style="color:var(--green)">${buyerG}</div><div class="as-sub">${buyerGP.toFixed(1)}% convert</div></div><div class="admin-stat"><div class="as-lbl">Staff aktif</div><div class="as-val">${names.length}</div></div></div></div><div class="section"><div class="section-label">Filter ikut supervisor</div><div class="filter-row">${fps}</div></div><div class="section"><div class="admin-chart"><div class="chart-title">Drop-off rate kumulatif</div>${cr}</div></div><div class="section"><div class="action-panel ${cls}"><div class="ap-title">${at}</div><div class="ap-body">${ab}</div></div></div><div class="section"><div class="section-label">Detail data — klik untuk expand</div>${expCards}</div><div class="section"><button class="export-btn" onclick="expAdm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Semua Data CSV</button></div>`;}
+// Render filter panel
+const fpEl=document.getElementById('admin-filter-panel');
+if(fpEl){
+  const staffOpts=['<option value="all">Semua Staff</option>',...names.map(n=>`<option value="${n}"${adminFilterStaff===n?' selected':''}>${n}</option>`)].join('');
+  const supOpts=['<option value="all">Semua Supervisor</option>',...sups.map(s=>`<option value="${s}"${adminFilterSup===s?' selected':''}>${s}</option>`)].join('');
+  fpEl.innerHTML=`<div class="filter-panel">
+    <div class="filter-panel-title"><span>Filter Data</span></div>
+    <div class="filter-grid">
+      <div><div class="filter-date-label">Staff</div><select class="filter-select" id="fs-staff" onchange="">${staffOpts}</select></div>
+      <div><div class="filter-date-label">Supervisor</div><select class="filter-select" id="fs-sup" onchange="">${supOpts}</select></div>
+    </div>
+    <div class="filter-date-label" style="margin-bottom:6px">Julat tarikh</div>
+    <div class="filter-date-row">
+      <div><div class="filter-date-label">Dari</div><input class="filter-date-input" type="date" id="fs-from" value="${adminDateFrom}"></div>
+      <div><div class="filter-date-label">Hingga</div><input class="filter-date-input" type="date" id="fs-to" value="${adminDateTo}"></div>
+    </div>
+    <div class="filter-actions">
+      <button class="filter-apply-btn" onclick="applyAdminFilter()">Guna Filter</button>
+      <button class="filter-clear-btn" onclick="clearAdminFilter()">Reset</button>
+    </div>
+  </div>`;
+}
+// Active filters pills
+const afEl=document.getElementById('admin-active-filters');
+if(afEl){
+  const pills=[];
+  if(adminFilterStaff&&adminFilterStaff!=='all')pills.push(`<div class="af-pill">Staff: ${adminFilterStaff}<button onclick="clearFilterField('staff')">×</button></div>`);
+  if(adminFilterSup&&adminFilterSup!=='all')pills.push(`<div class="af-pill">Supervisor: ${adminFilterSup}<button onclick="clearFilterField('sup')">×</button></div>`);
+  if(adminDateFrom)pills.push(`<div class="af-pill">Dari: ${adminDateFrom}<button onclick="clearFilterField('from')">×</button></div>`);
+  if(adminDateTo)pills.push(`<div class="af-pill">Hingga: ${adminDateTo}<button onclick="clearFilterField('to')">×</button></div>`);
+  afEl.innerHTML=pills.length?`<div class="active-filters">${pills.join('')}</div>`:'';
+}
+body.innerHTML=`<div class="section" style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;color:var(--text3)"><span class="live-dot"></span>Real-time • ${names.length} staff</div><button class="refresh-btn" id="refresh-btn" onclick="refreshAdmin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Refresh</button></div><div class="section"><div class="admin-stat-row"><div class="admin-stat"><div class="as-lbl">Total leads</div><div class="as-val">${gT}</div><div class="as-sub">${gE} entri</div></div><div class="admin-stat"><div class="as-lbl">Buying intent</div><div class="as-val" style="color:var(--green)">${gI}</div><div class="as-sub">${gIP}%</div></div><div class="admin-stat"><div class="as-lbl">Buyer (Sales)</div><div class="as-val" style="color:var(--green)">${buyerG}</div><div class="as-sub">${buyerGP.toFixed(1)}% convert</div></div><div class="admin-stat"><div class="as-lbl">Staff aktif</div><div class="as-val">${names.length}</div></div></div></div><div class="section" id="admin-filter-panel"></div><div class="section" id="admin-active-filters"></div><div class="section"><div class="admin-chart"><div class="chart-title">Drop-off rate kumulatif</div>${cr}</div></div><div class="section"><div class="action-panel ${cls}"><div class="ap-title">${at}</div><div class="ap-body">${ab}</div></div></div><div class="section"><div class="section-label">Detail data — klik untuk expand</div>${expCards}</div><div class="section"><button class="export-btn" onclick="expAdm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Semua Data CSV</button></div>`;}
 window.setAF=function(f){adminFilter=f;renderAdmin();};
 window.togExp=function(id){document.getElementById(id).classList.toggle('open');document.getElementById('chev_'+id).classList.toggle('open');};
 window.showConfirm=function(i){document.querySelectorAll('.confirm-del').forEach(el=>el.classList.remove('show'));const el=document.getElementById('cdel-'+i);if(el)el.classList.add('show');};
@@ -428,6 +587,39 @@ window.exportCSV=function(){const nm=prof.name||CU.email.split('@')[0],rows=[['H
 window.showAdmConfirm=function(cid){document.querySelectorAll('.confirm-del').forEach(el=>el.classList.remove('show'));const el=document.getElementById('acdel_'+cid);if(el)el.classList.add('show');};
 window.hideAdmConfirm=function(cid){const el=document.getElementById('acdel_'+cid);if(el)el.classList.remove('show');};
 window.admDelDay=async function(uid,dayIdx,cid){try{await deleteDoc(doc(db,'leads',uid,'days',`day${dayIdx+1}`));await deleteDoc(doc(db,'allLeads',`${uid}_day${dayIdx+1}`));showToast('✓ Data berjaya dipadam');}catch(e){showToast('Gagal padam — cuba lagi');}};
+window.refreshReport=async function(){
+  const btn=document.querySelector('#pane-report .refresh-btn');
+  if(btn)btn.classList.add('spinning');
+  await loadUD();
+  buildDS();
+  renderRep();
+  if(btn)btn.classList.remove('spinning');
+  showToast('✓ Data dikemaskini');
+};
+window.applyAdminFilter=function(){
+  adminFilterStaff=document.getElementById('fs-staff')?.value||'all';
+  adminFilterSup=document.getElementById('fs-sup')?.value||'all';
+  adminDateFrom=document.getElementById('fs-from')?.value||'';
+  adminDateTo=document.getElementById('fs-to')?.value||'';
+  renderAdmin();
+};
+window.clearAdminFilter=function(){
+  adminFilterStaff='all';adminFilterSup='all';adminDateFrom='';adminDateTo='';
+  renderAdmin();
+};
+window.clearFilterField=function(field){
+  if(field==='staff')adminFilterStaff='all';
+  else if(field==='sup')adminFilterSup='all';
+  else if(field==='from')adminDateFrom='';
+  else if(field==='to')adminDateTo='';
+  renderAdmin();
+};
+window.refreshAdmin=function(){
+  const btn=document.getElementById('refresh-btn');
+  if(btn)btn.classList.add('spinning');
+  if(adminUnsub){adminUnsub();adminUnsub=null;}
+  setTimeout(()=>{setupAdmin();if(btn)btn.classList.remove('spinning');},500);
+};
 window.expAdm=function(){const rows=[['Staff','Supervisor','Hari','Tarikh','Link Iklan','Total','L1%','L2%','L3%','L4%','L5%','Intent','Intent%']];Object.keys(ALD).forEach(n=>{ALD[n].days.forEach((d,i)=>{if(!d||!d.saved)return;const p=d.levels.map(v=>d.total>0?(v/d.total*100).toFixed(1)+'%':'0%'),int=(d.levels[3]||0)+(d.levels[4]||0);rows.push([n,d.supervisorName||'',`Hari ${i+1}`,d.date||'',(d.adLinks||[]).join('|'),d.total,...p,int,d.total>0?(int/d.total*100).toFixed(1)+'%':'0%']);});});dlC(rows,`wa_leads_admin.csv`);};
 function dlC(rows,fn){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.join(',')).join('\n')],{type:'text/csv;charset=utf-8'}));a.download=fn;a.click();}
 window.showToast=function(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);};
