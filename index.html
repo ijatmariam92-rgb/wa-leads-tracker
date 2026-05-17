@@ -209,6 +209,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .exp-lv-pct{font-size:11px;font-weight:600;color:var(--text);min-width:36px;text-align:right;font-family:'DM Mono',monospace}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:5px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.avatar-dropdown{position:absolute;top:46px;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 24px var(--shadow);min-width:180px;overflow:hidden;z-index:300;display:none}
+.avatar-dropdown.open{display:block}
+.dd-user{padding:12px 14px;border-bottom:1px solid var(--border)}
+.dd-user-name{font-size:13px;font-weight:600;color:var(--text)}
+.dd-user-email{font-size:11px;color:var(--text3);margin-top:1px;word-break:break-all}
+.dd-item{display:flex;align-items:center;gap:9px;padding:11px 14px;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;transition:background .15s;border:none;background:transparent;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.dd-item:hover{background:var(--surface2)}
+.dd-item svg{width:15px;height:15px;color:var(--text3);flex-shrink:0}
+.dd-item.danger{color:var(--red)}
+.dd-item.danger svg{color:var(--red)}
+.dd-item.danger:hover{background:var(--red-bg)}
+.dd-sep{height:1px;background:var(--border)}
+.avatar-wrap{position:relative}
 .loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:12px}
 .loading-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -281,7 +294,18 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="header-left"><div class="app-name">WA Leads</div><div class="user-pill" id="user-pill">—</div></div>
       <div class="header-right">
         <button class="icon-btn" onclick="toggleDark()"><svg id="dark-icon-app" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
-        <div class="avatar-btn" id="header-avatar" onclick="openModal('profile-modal')">?</div>
+        <div class="avatar-wrap">
+        <div class="avatar-btn" id="header-avatar" onclick="toggleAvatarDD()">?</div>
+        <div class="avatar-dropdown" id="avatar-dd">
+          <div class="dd-user">
+            <div class="dd-user-name" id="dd-name">—</div>
+            <div class="dd-user-email" id="dd-email">—</div>
+          </div>
+          <button class="dd-item" onclick="openProfileFromDD()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profil Saya</button>
+          <div class="dd-sep"></div>
+          <button class="dd-item danger" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log Keluar</button>
+        </div>
+      </div>
       </div>
     </div>
     <div class="nav">
@@ -330,7 +354,11 @@ function setTheme(t){document.documentElement.setAttribute('data-theme',t);local
 setTheme(localStorage.getItem('wa_theme')||'light');
 onAuthStateChanged(auth,async(user)=>{document.getElementById('loading').style.display='none';if(user){CU=user;isAdm=ADMIN.includes(user.email.toLowerCase());await initApp();}else{CU=null;isAdm=false;showAuth();}});
 function showAuth(){document.getElementById('auth-screen').style.display='flex';document.getElementById('app').classList.remove('visible');if(adminUnsub){adminUnsub();adminUnsub=null;}}
-async function initApp(){document.getElementById('auth-screen').style.display='none';document.getElementById('app').classList.add('visible');await loadProf();await loadUD();renderAvatar();buildSS();buildDS();buildLvs();buildAL();loadDTF(curDay);document.getElementById('entry-date').value=new Date().toISOString().split('T')[0];if(isAdm)document.querySelectorAll('.admin-only').forEach(el=>el.style.display='flex');const p=document.getElementById('user-pill');p.textContent=isAdm?'👑 Admin':(prof.name||CU.email.split('@')[0]);if(isAdm)p.classList.add('admin-pill');}
+async function initApp(){document.getElementById('auth-screen').style.display='none';document.getElementById('app').classList.add('visible');await loadProf();await loadUD();renderAvatar();
+  const ddN=document.getElementById('dd-name');const ddE=document.getElementById('dd-email');
+  if(ddN)ddN.textContent=prof.name||CU.email.split('@')[0];
+  if(ddE)ddE.textContent=CU.email;
+  buildSS();buildDS();buildLvs();buildAL();loadDTF(curDay);document.getElementById('entry-date').value=new Date().toISOString().split('T')[0];if(isAdm)document.querySelectorAll('.admin-only').forEach(el=>el.style.display='flex');const p=document.getElementById('user-pill');p.textContent=isAdm?'👑 Admin':(prof.name||CU.email.split('@')[0]);if(isAdm)p.classList.add('admin-pill');}
 let isReg=false;
 window.toggleRegister=function(){isReg=!isReg;document.getElementById('name-field').style.display=isReg?'block':'none';document.getElementById('auth-btn').textContent=isReg?'Daftar Sekarang':'Log Masuk';document.getElementById('auth-btn').onclick=isReg?doReg:doLogin;document.getElementById('reg-btn').textContent=isReg?'Dah ada akaun? Log Masuk':'Daftar Akaun Baru';document.getElementById('auth-sub').textContent=isReg?'Daftar akaun baru':'Log masuk untuk teruskan';document.getElementById('auth-pass').placeholder=isReg?'Min 6 aksara':'••••••••';document.getElementById('auth-err').style.display='none';};
 window.doLogin=async function(){const em=document.getElementById('auth-email').value.trim(),pw=document.getElementById('auth-pass').value,btn=document.getElementById('auth-btn');if(!em||!pw){showAE('Sila isi email dan password');return;}btn.classList.add('loading');btn.textContent='Log masuk...';document.getElementById('auth-err').style.display='none';try{await signInWithEmailAndPassword(auth,em,pw);}catch(e){showAE(e.code==='auth/too-many-requests'?'Terlalu banyak percubaan.':'Email atau password tidak betul');btn.classList.remove('loading');btn.textContent='Log Masuk';}};
@@ -344,7 +372,14 @@ function renderPSL(){const list=document.getElementById('profile-staff-list');if
 window.addStaff=function(){const inp=document.getElementById('new-staff-name'),nm=inp.value.trim();if(!nm)return;if(prof.staffList.includes(nm)){showToast('Nama sudah ada');return;}prof.staffList.push(nm);inp.value='';renderPSL();};
 window.removeStaff=function(i){prof.staffList.splice(i,1);renderPSL();};
 window.handleAvatarUpload=function(){showToast('Upload gambar tidak tersedia dalam plan percuma');};
-window.saveProfile=async function(){prof.name=document.getElementById('profile-name').value.trim();prof.position=document.getElementById('profile-position').value.trim();prof.phone=document.getElementById('profile-phone').value.trim();try{const {staffList,name,position,phone}=prof;await setDoc(doc(db,'profiles',CU.uid),{name,position,phone,staffList,email:CU.email,updatedAt:new Date().toISOString()});await updateProfile(CU,{displayName:prof.name});document.getElementById('user-pill').textContent=isAdm?'👑 Admin':(prof.name||CU.email.split('@')[0]);renderAvatar();buildSS();closeModal('profile-modal');showToast('✓ Profil disimpan!');}catch(e){showToast('Gagal simpan profil');}};
+window.saveProfile=async function(){prof.name=document.getElementById('profile-name').value.trim();prof.position=document.getElementById('profile-position').value.trim();prof.phone=document.getElementById('profile-phone').value.trim();try{const {staffList,name,position,phone}=prof;await setDoc(doc(db,'profiles',CU.uid),{name,position,phone,staffList,email:CU.email,updatedAt:new Date().toISOString()});await updateProfile(CU,{displayName:prof.name});document.getElementById('user-pill').textContent=isAdm?'👑 Admin':(prof.name||CU.email.split('@')[0]);renderAvatar();
+  const ddN=document.getElementById('dd-name');const ddE=document.getElementById('dd-email');
+  if(ddN)ddN.textContent=prof.name||CU.email.split('@')[0];
+  if(ddE)ddE.textContent=CU.email;
+  buildSS();closeModal('profile-modal');showToast('✓ Profil disimpan!');}catch(e){showToast('Gagal simpan profil');}};
+window.toggleAvatarDD=function(){const dd=document.getElementById('avatar-dd');dd.classList.toggle('open');};
+window.openProfileFromDD=function(){document.getElementById('avatar-dd').classList.remove('open');openModal('profile-modal');};
+document.addEventListener('click',function(e){const wrap=document.querySelector('.avatar-wrap');if(wrap&&!wrap.contains(e.target)){document.getElementById('avatar-dd').classList.remove('open');}});
 window.openModal=function(id){document.getElementById(id).classList.add('open');};
 window.closeModal=function(id){document.getElementById(id).classList.remove('open');};
 document.getElementById('profile-modal').addEventListener('click',function(e){if(e.target===this)closeModal('profile-modal');});
