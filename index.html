@@ -443,13 +443,13 @@ window.openModal=function(id){document.getElementById(id).classList.add('open');
 window.closeModal=function(id){document.getElementById(id).classList.remove('open');};
 document.getElementById('profile-modal').addEventListener('click',function(e){if(e.target===this)closeModal('profile-modal');});
 function buildSS(){const sel=document.getElementById('staff-selector');if(!prof.staffList.length){sel.innerHTML=`<div class="no-staff-msg">Belum ada staff. Tambah dalam profil dulu.<br><button onclick="openModal('profile-modal')" style="margin-top:8px;padding:6px 14px;border-radius:20px;border:1.5px solid var(--accent);background:var(--accent-bg);color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">+ Tambah Staff</button></div>`;return;}sel.innerHTML=prof.staffList.map((s,i)=>`<div class="staff-option${selStaff===s?' selected':''}" onclick="selStaffFn(${i})"><span>${s}</span><div class="so-check">${selStaff===s?'✓':''}</div></div>`).join('');}
-window.selStaffFn=function(i){selStaff=prof.staffList[i]||null;buildSS();};
+window.selStaffFn=function(i){selStaff=prof.staffList[i]||null;buildSS();buildDS();loadDTF(curDay);};
 async function loadUD(){if(!CU)return;for(let i=0;i<DAYS;i++){try{const s=await getDoc(doc(db,'leads',CU.uid,'days',`day${i+1}`));if(s.exists()){const d=s.data();SD[i]={staffName:d.staffName||'',date:d.date||'',adLinks:d.adLinks||[],total:d.total||0,levels:d.levels||[0,0,0,0,0],saved:d.saved||false};}}catch(e){}}}
 async function saveDF(idx){const d=SD[idx],nm=prof.name||CU.email.split('@')[0],pl={...d,uid:CU.uid,supervisorName:nm,supervisorEmail:CU.email,dayIndex:idx+1,updatedAt:new Date().toISOString()};await setDoc(doc(db,'leads',CU.uid,'days',`day${idx+1}`),pl);await setDoc(doc(db,'allLeads',`${CU.uid}_day${idx+1}`),pl);}
 window.goTab=function(t){['input','report','admin'].forEach(id=>{document.getElementById('pane-'+id).style.display=t===id?'block':'none';const b=document.getElementById('nav-'+id);if(b)b.classList.toggle('active',t===id);});if(t==='report')renderRep();if(t==='admin'&&isAdm)setupAdmin();};
 function buildDS(){const row=document.getElementById('day-row');row.innerHTML=SD.map((d,i)=>`<button class="day-pill${i===curDay?' active':''}${d.saved?' saved':''}" onclick="selDay(${i})"><span class="dp-num">Hari ${i+1}</span><span>${d.saved?(d.staffName||'✓'):'—'}</span></button>`).join('');const f=SD.filter(d=>d.saved).length;document.getElementById('prog-bar').innerHTML=Array.from({length:DAYS},(_,i)=>`<div class="pb-seg${SD[i].saved?' filled':''}"></div>`).join('');document.getElementById('prog-label').textContent=`${f} / ${DAYS} hari diisi`;}
 window.selDay=function(i){curDay=i;buildDS();loadDTF(i);};
-function loadDTF(i){const d=SD[i];if(!selStaff&&d.staffName&&prof.staffList.includes(d.staffName))selStaff=d.staffName;document.getElementById('entry-date').value=d.date||new Date().toISOString().split('T')[0];adLinks=d.adLinks&&d.adLinks.length?d.adLinks.map(l=>typeof l==='string'?{url:l,active:true}:l):[{url:'',active:true}];probData=d.problems?{...{hb:0,alahan:0,lesu:0,lain:0,lainText:''},...d.problems}:{hb:0,alahan:0,lesu:0,lain:0,lainText:''};buildAL();LVS.forEach((_,j)=>{const el=document.getElementById('lv'+j);if(el)el.value=d.levels[j]||0;});document.getElementById('total').value=d.total||'';buildSS();recalc();buildProbs();}
+function loadDTF(i){const d=SD[i];if(d.staffName&&prof.staffList.includes(d.staffName))selStaff=d.staffName;document.getElementById('entry-date').value=d.date||new Date().toISOString().split('T')[0];adLinks=d.adLinks&&d.adLinks.length?d.adLinks.map(l=>typeof l==='string'?{url:l,active:true}:l):[{url:'',active:true}];probData=d.problems?{...{hb:0,alahan:0,lesu:0,lain:0,lainText:''},...d.problems}:{hb:0,alahan:0,lesu:0,lain:0,lainText:''};buildAL();LVS.forEach((_,j)=>{const el=document.getElementById('lv'+j);if(el)el.value=d.levels[j]||0;});document.getElementById('total').value=d.total||'';buildSS();recalc();buildProbs();}
 function buildAL(){const list=document.getElementById('adlinks-list');list.innerHTML=adLinks.map((lnk,i)=>{const url=lnk.url||'';const active=lnk.active!==false;return`<div style="margin-bottom:10px;padding:10px 12px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid ${active?'var(--border)':'var(--red)'}">
 <div class="ad-link-row" style="margin-bottom:0">
 <input class="ad-link-input" type="url" value="${url}" placeholder="https://facebook.com/ads/..." oninput="updAL(${i},'url',this.value)">
@@ -529,41 +529,7 @@ const probSummary=prTot>0?('<div class="prob-summary"><div style="font-size:11px
 return`<div class="day-summary-card"><div class="dsc-head"><div><div class="dsc-day">Hari ${i+1}${d.date?' • '+d.date:''}</div><div class="dsc-staff-name">${d.staffName||'—'}</div>${lks}</div><div><div class="dsc-total">${d.total}</div><div class="dsc-sub">leads</div></div></div><div class="dsc-levels">${lrs}</div>${probSummary}<div class="confirm-del" id="cdel-${i}"><p>⚠ Padam data Hari ${i+1}? Tindakan ini tidak boleh diundur.</p><div class="confirm-del-row"><button class="confirm-yes" onclick="delDay(${i})">Ya, Padam</button><button class="confirm-no" onclick="hideConfirm(${i})">Batal</button></div></div><button class="del-day-btn" onclick="showConfirm(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Padam data hari ini</button></div>`;}).join('');const l1a=tL>0?tLv[0]/tL*100:0,buyerTot=tLv[5]||0,buyerPct=tL>0?(buyerTot/tL*100):0;let cls='amber',at='',ab='';if(buyerPct>=20){cls='green';at=`Iklan bagus — ${buyerPct.toFixed(0)}% convert jadi Buyer!`;ab=`Dalam ${saved.length} hari, ${buyerTot} leads berjaya jadi pembeli. Iklan performing well.`;}else if(buyerPct>0){cls='amber';at=`Conversion ${buyerPct.toFixed(0)}% — boleh ditingkatkan`;ab=`${buyerTot} leads jadi Buyer. Optimize follow-up dan closing skrip untuk tingkatkan lagi.`;}else if(l1a>=40){cls='red';at='Perlu baiki iklan';ab=`${l1a.toFixed(0)}% leads berhenti di L1 — semak targeting iklan.`;}else if(+iP>=25){cls='green';at='Buying intent bagus!';ab=`${iP}% leads tunjuk minat beli.`;}else{cls='amber';at=`L${hI+1} paling banyak drop`;ab=`Perbaiki skrip di Level ${hI+1}.`;}body.innerHTML=`<div class="section"><div class="summary-strip"><div class="ss-title">Ringkasan ${saved.length} hari</div><div class="big-metric-row"><div class="big-metric"><div class="bm-lbl">Total leads</div><div class="bm-val">${tL}</div><div class="bm-sub">${saved.length} hari</div></div><div class="big-metric"><div class="bm-lbl">Buying intent</div><div class="bm-val" style="color:var(--green)">${iT}</div><div class="bm-sub">${iP}%</div></div></div><div class="action-panel ${cls}"><div class="ap-title">${at}</div><div class="ap-body">${ab}</div></div></div></div><div class="section"><div class="section-label">Breakdown setiap hari</div>${cards}</div>`;}
 let ALD={};
 function setupAdmin(){document.getElementById('admin-body').innerHTML='<div class="empty-state"><div class="loading-spinner" style="margin:0 auto"></div><p style="margin-top:12px">Memuatkan...</p></div>';if(adminUnsub)adminUnsub();adminUnsub=onSnapshot(collection(db,'allLeads'),(snap)=>{ALD={};snap.forEach(ds=>{const d=ds.data(),k=d.staffName||d.supervisorName||'Unknown';if(!ALD[k])ALD[k]={sup:d.supervisorName||'',em:d.supervisorEmail||'',days:Array(DAYS).fill(null)};if(d.dayIndex>=1&&d.dayIndex<=DAYS)ALD[k].days[d.dayIndex-1]=d;});renderAdmin();});}
-function renderAdmin(){const body=document.getElementById('admin-body'),names=Object.keys(ALD);
-// Always render filter panel first
-const fpEl=document.getElementById('admin-filter-panel');
-if(fpEl){
-  const staffOpts=['<option value="all">Semua Staff</option>',...names.map(n=>`<option value="${n}"${adminFilterStaff===n?' selected':''}>${n}</option>`)].join('');
-  const sups=[...new Set(Object.values(ALD).map(d=>d.sup).filter(Boolean))];
-  const supOpts=['<option value="all">Semua Supervisor</option>',...sups.map(s=>`<option value="${s}"${adminFilterSup===s?' selected':''}>${s}</option>`)].join('');
-  fpEl.innerHTML=`<div class="filter-panel">
-    <div class="filter-panel-title"><span>🔍 Filter Data</span></div>
-    <div class="filter-grid">
-      <div><div class="filter-date-label">Staff</div><select class="filter-select" id="fs-staff">${staffOpts}</select></div>
-      <div><div class="filter-date-label">Supervisor</div><select class="filter-select" id="fs-sup">${supOpts}</select></div>
-    </div>
-    <div class="filter-date-label" style="margin-bottom:6px">Julat tarikh</div>
-    <div class="filter-date-row">
-      <div><div class="filter-date-label">Dari</div><input class="filter-date-input" type="date" id="fs-from" value="${adminDateFrom}"></div>
-      <div><div class="filter-date-label">Hingga</div><input class="filter-date-input" type="date" id="fs-to" value="${adminDateTo}"></div>
-    </div>
-    <div class="filter-actions">
-      <button class="filter-apply-btn" onclick="applyAdminFilter()">Guna Filter</button>
-      <button class="filter-clear-btn" onclick="clearAdminFilter()">Reset</button>
-    </div>
-  </div>`;
-}
-// Active filter pills
-const afEl=document.getElementById('admin-active-filters');
-if(afEl){
-  const pills=[];
-  if(adminFilterStaff&&adminFilterStaff!=='all')pills.push(`<div class="af-pill">Staff: ${adminFilterStaff}<button onclick="clearFilterField('staff')">×</button></div>`);
-  if(adminFilterSup&&adminFilterSup!=='all')pills.push(`<div class="af-pill">Supervisor: ${adminFilterSup}<button onclick="clearFilterField('sup')">×</button></div>`);
-  if(adminDateFrom)pills.push(`<div class="af-pill">Dari: ${adminDateFrom}<button onclick="clearFilterField('from')">×</button></div>`);
-  if(adminDateTo)pills.push(`<div class="af-pill">Hingga: ${adminDateTo}<button onclick="clearFilterField('to')">×</button></div>`);
-  afEl.innerHTML=pills.length?`<div class="active-filters">${pills.join('')}</div>`:'';
-}
-if(!names.length){body.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><p>Tiada data lagi.</p></div>';return;}const sups=[...new Set(Object.values(ALD).map(d=>d.sup).filter(Boolean))];
+function renderAdmin(){const body=document.getElementById('admin-body'),names=Object.keys(ALD);if(!names.length){body.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><p>Tiada data lagi.</p></div>';return;}const sups=[...new Set(Object.values(ALD).map(d=>d.sup).filter(Boolean))];
 const fNames=names.filter(n=>{
   if(adminFilterStaff&&adminFilterStaff!=='all'&&n!==adminFilterStaff)return false;
   if(adminFilterSup&&adminFilterSup!=='all'&&ALD[n].sup!==adminFilterSup)return false;
@@ -583,6 +549,38 @@ const adminProbRows=adminProbItems.map(p=>{if(!dpr[p.id])return'';const note=(p.
 const adminProbHtml=dprTot>0?('<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Masalah Customer</div>'+adminProbRows+'</div>'):'';
 return`<div class="exp-card"><div class="exp-header" onclick="togExp('${cid}')"><div class="exp-left"><div class="exp-day">Hari ${i+1}${d.date?' • '+d.date:''}</div><div class="exp-staff">${sn} <span style="font-size:11px;color:var(--text3)">(${d.supervisorName||''})</span></div></div><div class="exp-right"><div><div class="exp-total">${d.total}</div><div style="font-size:10px;color:var(--text3);text-align:right">leads</div></div><span class="intent-pill ${pc}">${iP}%</span><svg class="exp-chevron" id="chev_${cid}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div></div><div class="exp-body" id="${cid}"><div class="exp-adlinks">${lks}</div><div class="exp-levels">${lrs}</div>${adminProbHtml}<div class="confirm-del" id="acdel_${cid}"><p>⚠ Padam data ${sn} Hari ${i+1}? Tidak boleh diundur.</p><div class="confirm-del-row"><button class="confirm-yes" onclick="admDelDay('${d.uid}',${i},'${cid}')">Ya, Padam</button><button class="confirm-no" onclick="hideAdmConfirm('${cid}')">Batal</button></div></div><button class="del-day-btn" onclick="showAdmConfirm('${cid}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Padam data ini</button></div></div>`;}).filter(Boolean)).join('');
 const l1a=gT>0?gL[0]/gT*100:0,buyerG=gL[5]||0,buyerGP=gT>0?(buyerG/gT*100):0;let cls='amber',at='',ab='';if(buyerGP>=20){cls='green';at=`Iklan bagus — ${buyerGP.toFixed(0)}% convert jadi Buyer!`;ab=`${buyerG} leads berjaya jadi pembeli. Iklan-iklan semasa performing well — pertimbangkan tambah bajet.`;}else if(buyerGP>0){cls='amber';at=`Conversion ${buyerGP.toFixed(0)}% — boleh ditingkatkan`;ab=`${buyerG} leads jadi Buyer setakat ini. Semak follow-up dan closing skrip untuk tingkatkan conversion.`;}else if(l1a>=40){cls='red';at='Perlu baiki iklan';ab=`${l1a.toFixed(0)}% leads berhenti di L1 — semak targeting iklan.`;}else if(+gIP>=25){cls='green';at='Buying intent bagus!';ab=`${gIP}% leads tunjuk minat beli.`;}else{cls='amber';at=`L${hIdx+1} paling banyak drop`;ab=`Perbaiki skrip di Level ${hIdx+1}.`;}
+// Render filter panel
+const fpEl=document.getElementById('admin-filter-panel');
+if(fpEl){
+  const staffOpts=['<option value="all">Semua Staff</option>',...names.map(n=>`<option value="${n}"${adminFilterStaff===n?' selected':''}>${n}</option>`)].join('');
+  const supOpts=['<option value="all">Semua Supervisor</option>',...sups.map(s=>`<option value="${s}"${adminFilterSup===s?' selected':''}>${s}</option>`)].join('');
+  fpEl.innerHTML=`<div class="filter-panel">
+    <div class="filter-panel-title"><span>Filter Data</span></div>
+    <div class="filter-grid">
+      <div><div class="filter-date-label">Staff</div><select class="filter-select" id="fs-staff" onchange="">${staffOpts}</select></div>
+      <div><div class="filter-date-label">Supervisor</div><select class="filter-select" id="fs-sup" onchange="">${supOpts}</select></div>
+    </div>
+    <div class="filter-date-label" style="margin-bottom:6px">Julat tarikh</div>
+    <div class="filter-date-row">
+      <div><div class="filter-date-label">Dari</div><input class="filter-date-input" type="date" id="fs-from" value="${adminDateFrom}"></div>
+      <div><div class="filter-date-label">Hingga</div><input class="filter-date-input" type="date" id="fs-to" value="${adminDateTo}"></div>
+    </div>
+    <div class="filter-actions">
+      <button class="filter-apply-btn" onclick="applyAdminFilter()">Guna Filter</button>
+      <button class="filter-clear-btn" onclick="clearAdminFilter()">Reset</button>
+    </div>
+  </div>`;
+}
+// Active filters pills
+const afEl=document.getElementById('admin-active-filters');
+if(afEl){
+  const pills=[];
+  if(adminFilterStaff&&adminFilterStaff!=='all')pills.push(`<div class="af-pill">Staff: ${adminFilterStaff}<button onclick="clearFilterField('staff')">×</button></div>`);
+  if(adminFilterSup&&adminFilterSup!=='all')pills.push(`<div class="af-pill">Supervisor: ${adminFilterSup}<button onclick="clearFilterField('sup')">×</button></div>`);
+  if(adminDateFrom)pills.push(`<div class="af-pill">Dari: ${adminDateFrom}<button onclick="clearFilterField('from')">×</button></div>`);
+  if(adminDateTo)pills.push(`<div class="af-pill">Hingga: ${adminDateTo}<button onclick="clearFilterField('to')">×</button></div>`);
+  afEl.innerHTML=pills.length?`<div class="active-filters">${pills.join('')}</div>`:'';
+}
 body.innerHTML=`<div class="section" style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;color:var(--text3)"><span class="live-dot"></span>Real-time • ${names.length} staff</div><button class="refresh-btn" id="refresh-btn" onclick="refreshAdmin()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Refresh</button></div><div class="section"><div class="admin-stat-row"><div class="admin-stat"><div class="as-lbl">Total leads</div><div class="as-val">${gT}</div><div class="as-sub">${gE} entri</div></div><div class="admin-stat"><div class="as-lbl">Buying intent</div><div class="as-val" style="color:var(--green)">${gI}</div><div class="as-sub">${gIP}%</div></div><div class="admin-stat"><div class="as-lbl">Buyer (Sales)</div><div class="as-val" style="color:var(--green)">${buyerG}</div><div class="as-sub">${buyerGP.toFixed(1)}% convert</div></div><div class="admin-stat"><div class="as-lbl">Staff aktif</div><div class="as-val">${names.length}</div></div></div></div><div class="section" id="admin-filter-panel"></div><div class="section" id="admin-active-filters"></div><div class="section"><div class="admin-chart"><div class="chart-title">Drop-off rate kumulatif</div>${cr}</div></div><div class="section"><div class="action-panel ${cls}"><div class="ap-title">${at}</div><div class="ap-body">${ab}</div></div></div><div class="section"><div class="section-label">Detail data — klik untuk expand</div>${expCards}</div><div class="section"><button class="export-btn" onclick="expAdm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Semua Data CSV</button></div>`;}
 window.setAF=function(f){adminFilter=f;renderAdmin();};
 window.togExp=function(id){document.getElementById(id).classList.toggle('open');document.getElementById('chev_'+id).classList.toggle('open');};
