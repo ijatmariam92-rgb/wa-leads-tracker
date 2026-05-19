@@ -256,38 +256,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .prob-summary-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
 .prob-summary-label{color:var(--text2)}
 .prob-summary-val{font-weight:600;color:var(--text)}
-.reset-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:7px 14px;border-radius:20px;border:1.5px solid var(--amber);background:transparent;color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:10px;transition:all .15s}
-.reset-btn:hover{background:var(--amber-bg)}
-.reset-btn svg{width:13px;height:13px}
-.archive-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:var(--amber-bg);color:var(--amber);margin-left:6px}
-.staff-summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
-.ssc-header{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;transition:background .15s}
-.ssc-header:hover{background:var(--surface2)}
-.ssc-left{display:flex;align-items:center;gap:10px}
-.ssc-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0}
-.ssc-name{font-size:13px;font-weight:600;color:var(--text)}
-.ssc-sup{font-size:11px;color:var(--text3);margin-top:1px}
-.ssc-right{display:flex;align-items:center;gap:8px}
-.ssc-total{font-size:18px;font-weight:600;color:var(--text)}
-.ssc-body{display:none;padding:0 15px 14px;border-top:1px solid var(--border)}
-.ssc-body.open{display:block}
-.ssc-chevron{width:16px;height:16px;color:var(--text3);transition:transform .2s}
-.ssc-chevron.open{transform:rotate(180deg)}
-.ssc-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;margin-bottom:10px}
-.ssc-stat{background:var(--surface2);border-radius:var(--radius-sm);padding:9px 10px}
-.ssc-stat-lbl{font-size:10px;color:var(--text3);margin-bottom:2px}
-.ssc-stat-val{font-size:16px;font-weight:600;color:var(--text)}
-.ssc-stat-sub{font-size:10px;color:var(--text3)}
-.ssc-levels{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
-.ssc-lv{display:flex;align-items:center;gap:7px}
-.ssc-lv-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.ssc-lv-name{font-size:12px;color:var(--text2);flex:1}
-.ssc-lv-bar{flex:2;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
-.ssc-lv-fill{height:100%;border-radius:3px}
-.ssc-lv-pct{font-size:11px;font-weight:600;color:var(--text);min-width:34px;text-align:right;font-family:'DM Mono',monospace}
-.export-filter-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.export-filter-select{flex:1;min-width:120px;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a8a69f' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
-.export-filter-select:focus{border-color:var(--accent)}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:5px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .avatar-dropdown{position:absolute;top:46px;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 24px var(--shadow);min-width:180px;overflow:hidden;z-index:300;display:none}
@@ -369,16 +337,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <button class="close-modal-btn" onclick="closeModal('profile-modal')">Tutup</button>
   </div>
 </div>
-<div class="modal-overlay" id="reset-modal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">⚠️ Mula Semula</div>
-    <p style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px">Data 5 hari semasa akan di-<strong>archive</strong> dan disimpan dalam rekod. Slot Hari 1-5 akan dikosongkan untuk cycle baru.<br><br>Data lama <strong>tidak akan dipadam</strong> — boleh tengok dalam Admin dashboard.</p>
-    <div id="reset-cycle-info" style="background:var(--surface2);border-radius:var(--radius-sm);padding:10px 13px;margin-bottom:16px;font-size:12px;color:var(--text2)"></div>
-    <button class="save-profile-btn" onclick="doReset()" style="background:var(--amber);margin-bottom:8px">Archive & Mula Semula</button>
-    <button class="close-modal-btn" onclick="closeModal('reset-modal')">Batal</button>
-  </div>
-</div>
 <div class="app" id="app">
   <div class="header">
     <div class="header-top">
@@ -414,12 +372,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
         <div class="pb-label" id="prog-label">0 / 5 hari diisi</div>
         <div class="day-row" id="day-row"></div>
       </div>
-      <div class="section" id="reset-section" style="display:none">
-        <button class="reset-btn" onclick="openResetConfirm()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
-          Mula Semula (Archive & Reset)
-        </button>
-      </div>
       <div class="section"><div class="section-label">Link iklan Meta Ads</div><div class="card"><div class="card-body" id="adlinks-container"><div id="adlinks-list"></div><button class="add-link-btn" onclick="addAdLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Tambah link iklan</button></div></div></div>
       <div class="section"><div class="section-label">Total leads masuk</div><div class="card"><div class="card-body"><div class="total-wrap"><input class="total-big" type="number" id="total" placeholder="0" min="0" oninput="recalc()"><span class="total-unit">leads</span></div><div id="remaining-area"></div></div></div></div>
       <div class="section"><div class="section-label">Leads berhenti di level mana?</div><div class="card" id="lv-list"></div></div>
@@ -437,21 +389,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
         <button class="refresh-btn" onclick="refreshReport()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Refresh</button>
       </div>
-      <div id="staff-summary-section"></div>
       <div id="report-body"></div>
-      <div class="section">
-        <div class="section-label">Export Data</div>
-        <div class="card"><div class="card-body">
-          <div class="export-filter-row">
-            <select class="export-filter-select" id="export-staff-filter">
-              <option value="all">Semua Staff</option>
-            </select>
-            <select class="export-filter-select" id="export-cycle-filter">
-              <option value="current">Cycle Semasa</option>
-            </select>
-          </div>
-        </div></div>
-        <button class="export-btn" onclick="exportCSVFiltered()" style="margin-top:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button></div></div>
+      <div class="section"><button class="export-btn" onclick="exportCSV()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button></div>
     </div>
     <div id="pane-admin" style="display:none"><div id="admin-body"></div></div>
   </div>
@@ -743,35 +682,11 @@ window.goTab=function(t){
     document.getElementById('pane-'+id).style.display=t===id?'block':'none';
     const b=document.getElementById('nav-'+id);if(b)b.classList.toggle('active',t===id);
   });
-  if(t==='report'){renderRep();populateExportFilter();}
+  if(t==='report')renderRep();
   if(t==='admin'&&isAdm)setupAdmin();
 };
 
 // ── REPORT (per user — all their staff) ──────────────────
-function renderStaffSummary(){
-  const sec=document.getElementById('staff-summary-section');
-  if(!sec)return;
-  const staffNames=Object.keys(SD);
-  if(!staffNames.length){sec.innerHTML='';return;}
-  const colors=['#1a5cff','#7c3aed','#0891b2','#d97706','#dc2626','#16a34a','#c026d3'];
-  const cards=staffNames.map((sn,si)=>{
-    const days=SD[sn]||[];
-    const saved=days.filter(d=>d&&d.saved);
-    if(!saved.length)return'';
-    let totL=0,totLv=[0,0,0,0,0,0],intentTot=0,buyerTot=0;
-    saved.forEach(d=>{totL+=d.total||0;(d.levels||[]).forEach((v,j)=>totLv[j]+=v);intentTot+=(d.levels[3]||0)+(d.levels[4]||0);buyerTot+=d.levels[5]||0;});
-    const iP=totL>0?(intentTot/totL*100).toFixed(1):0;
-    const bP=totL>0?(buyerTot/totL*100).toFixed(1):0;
-    const col=colors[si%colors.length];
-    const init=sn.charAt(0).toUpperCase();
-    const cid='ssc_'+sn.replace(/\W/g,'_');
-    const lvRows=LVS.map((lv,j)=>{const pct=totL>0?(totLv[j]/totL*100):0;return'<div class="ssc-lv"><div class="ssc-lv-dot" style="background:'+lv.c+'"></div><div class="ssc-lv-name">'+lv.n+'</div><div class="ssc-lv-bar"><div class="ssc-lv-fill" style="width:'+Math.min(pct,100)+'%;background:'+lv.c+'"></div></div><div class="ssc-lv-pct">'+pct.toFixed(1)+'%</div></div>';}).join('');
-    const pillCls=+bP>=20?'intent-high':+bP>0?'intent-mid':'intent-low';
-    return'<div class="staff-summary-card"><div class="ssc-header" onclick="togSSC(\"'+cid+'\")"><div class="ssc-left"><div class="ssc-avatar" style="background:'+col+'">'+init+'</div><div><div class="ssc-name">'+sn+'</div><div class="ssc-sup">'+saved.length+' / '+DAYS+' hari diisi</div></div></div><div class="ssc-right"><div><div class="ssc-total">'+totL+'</div><div style="font-size:10px;color:var(--text3);text-align:right">leads</div></div><span class="intent-pill '+pillCls+'">'+bP+'% sales</span><svg class="ssc-chevron" id="sscchev_'+cid+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div></div><div class="ssc-body" id="'+cid+'"><div class="ssc-stat-row"><div class="ssc-stat"><div class="ssc-stat-lbl">Total leads</div><div class="ssc-stat-val">'+totL+'</div></div><div class="ssc-stat"><div class="ssc-stat-lbl">Buying intent</div><div class="ssc-stat-val" style="color:var(--green)">'+intentTot+'</div><div class="ssc-stat-sub">'+iP+'%</div></div><div class="ssc-stat"><div class="ssc-stat-lbl">Buyer (Sales)</div><div class="ssc-stat-val" style="color:var(--green)">'+buyerTot+'</div><div class="ssc-stat-sub">'+bP+'%</div></div></div><div class="ssc-levels">'+lvRows+'</div></div></div>';
-  }).filter(Boolean).join('');
-  sec.innerHTML=cards?'<div class="section-label">Ringkasan setiap staff</div>'+cards:'';
-}
-window.togSSC=function(id){document.getElementById(id).classList.toggle('open');document.getElementById('sscchev_'+id).classList.toggle('open');};
 function renderRep(){
   const body=document.getElementById('report-body');
   // Collect all saved days across all staff for this supervisor
@@ -910,58 +825,6 @@ window.clearFilterField=function(field){if(field==='staff')adminFilterStaff='all
 window.refreshAdmin=function(){const btn=document.getElementById('refresh-btn');if(btn)btn.classList.add('spinning');if(adminUnsub){adminUnsub();adminUnsub=null;}setTimeout(()=>{setupAdmin();if(btn)btn.classList.remove('spinning');},500);};
 
 // ── REFRESH REPORT ────────────────────────────────────────
-// ── RESET / ARCHIVE ───────────────────────────────────────
-window.openResetConfirm=function(){
-  const cycleNum=+((CU?localStorage.getItem('cycle_'+CU.uid):null)||'1');
-  document.getElementById('reset-cycle-info').innerHTML=
-    'Cycle semasa: <strong>Cycle '+cycleNum+'</strong><br>Selepas reset, data akan disimpan sebagai Cycle '+cycleNum+' dan cycle baru (Cycle '+(cycleNum+1)+') akan bermula.';
-  openModal('reset-modal');
-};
-
-window.doReset=async function(){
-  if(!CU)return;
-  const cycleNum=+((localStorage.getItem('cycle_'+CU.uid))||'1');
-  const btn=document.querySelector('#reset-modal .save-profile-btn');
-  if(btn){btn.textContent='Archiving...';btn.style.opacity='.6';btn.style.pointerEvents='none';}
-  try{
-    // Archive current data to cycles collection
-    const archiveData={cycle:cycleNum,archivedAt:new Date().toISOString(),supervisorName:prof.name||CU.email,supervisorEmail:CU.email,days:{}};
-    Object.keys(SD).forEach(sn=>{archiveData.days[sn]=SD[sn];});
-    await setDoc(doc(db,'archives',CU.uid,'cycles','cycle'+cycleNum),archiveData);
-    // Also archive each day in allLeads to allLeadsArchive
-    for(const sn of Object.keys(SD)){
-      for(let i=0;i<DAYS;i++){
-        const d=SD[sn]&&SD[sn][i];
-        if(d&&d.saved){
-          await setDoc(doc(db,'allLeadsArchive',CU.uid+'_'+sn.replace(/\s/g,'_')+'_c'+cycleNum+'_day'+(i+1)),{...d,cycle:cycleNum,archivedAt:new Date().toISOString()}).catch(()=>{});
-          await deleteDoc(doc(db,'allLeads',CU.uid+'_'+sn.replace(/\s/g,'_')+'_day'+(i+1))).catch(()=>{});
-        }
-      }
-    }
-    // Clear current data
-    for(const sn of Object.keys(SD)){
-      for(let i=0;i<DAYS;i++){
-        await deleteDoc(doc(db,'leads',CU.uid,'staff',sn,'days','day'+(i+1))).catch(()=>{});
-      }
-    }
-    // Update cycle number
-    localStorage.setItem('cycle_'+CU.uid, cycleNum+1);
-    SD={};savedSnap={};
-    buildDS();buildSS();checkResetNeeded();
-    closeModal('reset-modal');
-    showToast('✅ Data di-archive! Cycle '+(cycleNum+1)+' bermula.');
-    checkResetNeeded();
-  }catch(e){showToast('Gagal archive — cuba lagi');}
-  if(btn){btn.textContent='Archive & Mula Semula';btn.style.opacity='';btn.style.pointerEvents='';}
-};
-
-function checkResetNeeded(){
-  const allStaffDays=Object.values(SD);
-  const total5Days=allStaffDays.some(days=>Array.isArray(days)&&days.filter(d=>d&&d.saved).length>=5);
-  const resetSec=document.getElementById('reset-section');
-  if(resetSec)resetSec.style.display=total5Days?'block':'none';
-}
-
 window.refreshReport=async function(){
   const btn=document.querySelector('#pane-report .refresh-btn');
   if(btn)btn.classList.add('spinning');
@@ -980,31 +843,6 @@ window.exportCSV=function(){
   Object.keys(SD).forEach(sn=>{SD[sn].forEach((d,i)=>{const p=d.levels.map(v=>d.total>0?(v/d.total*100).toFixed(1)+'%':'0%'),int=(d.levels[3]||0)+(d.levels[4]||0);rows.push([sn,`Hari ${i+1}`,d.date,(d.adLinks||[]).map(l=>typeof l==='string'?l:(l.url||'')).join('|'),d.total,...p,int,d.total>0?(int/d.total*100).toFixed(1)+'%':'0%']);});});
   dlC(rows,`wa_leads_${nm}.csv`);
 };
-window.exportCSVFiltered=function(){
-  const staffFilter=document.getElementById('export-staff-filter')?.value||'all';
-  const nm=prof.name||CU.email.split('@')[0];
-  const rows=[['Staff','Hari','Tarikh','Link Iklan','Total','L1%','L2%','L3%','L4%','L5%','L6 Buyer%','Intent','Intent%','Buyer','Buyer%']];
-  Object.keys(SD).forEach(sn=>{
-    if(staffFilter!=='all'&&sn!==staffFilter)return;
-    (SD[sn]||[]).forEach((d,i)=>{
-      if(!d||!d.saved)return;
-      const p=d.levels.map(v=>d.total>0?(v/d.total*100).toFixed(1)+'%':'0%');
-      const intent=(d.levels[3]||0)+(d.levels[4]||0);
-      const buyer=d.levels[5]||0;
-      rows.push([sn,'Hari '+(i+1),d.date||'',(d.adLinks||[]).map(l=>typeof l==='string'?l:(l.url||'')).join('|'),d.total,...p,intent,d.total>0?(intent/d.total*100).toFixed(1)+'%':'0%',buyer,d.total>0?(buyer/d.total*100).toFixed(1)+'%':'0%']);
-    });
-  });
-  const suffix=staffFilter==='all'?'semua':'staff_'+staffFilter.replace(/\s/g,'_');
-  dlC(rows,'wa_leads_'+suffix+'_'+new Date().toISOString().split('T')[0]+'.csv');
-};
-
-function populateExportFilter(){
-  const sel=document.getElementById('export-staff-filter');
-  if(!sel)return;
-  const names=Object.keys(SD);
-  sel.innerHTML='<option value="all">Semua Staff</option>'+names.map(n=>'<option value="'+n+'">'+n+'</option>').join('');
-}
-
 window.expAdm=function(){
   const rows=[['Staff','Supervisor','Hari','Tarikh','Link Iklan','Total','L1%','L2%','L3%','L4%','L5%','L6%','Intent','Intent%']];
   Object.keys(ALD).forEach(n=>{ALD[n].days.forEach((d,i)=>{if(!d||!d.saved)return;const p=d.levels.map(v=>d.total>0?(v/d.total*100).toFixed(1)+'%':'0%'),int=(d.levels[3]||0)+(d.levels[4]||0);rows.push([n,d.supervisorName||'',`Hari ${i+1}`,d.date||'',(d.adLinks||[]).map(l=>typeof l==='string'?l:(l.url||'')).join('|'),d.total,...p,int,d.total>0?(int/d.total*100).toFixed(1)+'%':'0%']);});});
